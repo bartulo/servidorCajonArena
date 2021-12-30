@@ -125,8 +125,9 @@ class LineSidebar {
 
   }
 
-  createObject () {
+  createObject = () => {
 
+    console.log( this );
     const geometry = new BufferGeometry();
 
     let matLine = new LineBasicMaterial( {
@@ -142,7 +143,7 @@ class LineSidebar {
 
   }
 
-  createElement () {
+  createElement = () => {
     this.elem = document.createElement('DIV');
     this.elem.classList.add( 'line' );
     this.elem.style.border = 'solid 3px ' + this.sidebar.color;

@@ -44,7 +44,7 @@ class App {
 
 
 		this.camera = new PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
-		this.camera.position.set( 0, 8000, 0 );
+		this.camera.position.set( 0, 800, 0 );
 
 		this.scene = new Scene();
     this.scene.background = 'black';
@@ -72,7 +72,7 @@ class App {
 
     var terrainLoader = new TerrainLoader();
     terrainLoader.load(Mdt, ( data ) => {
-      const geometry = new PlaneGeometry( 4700, 2600, 399, 224 );
+      const geometry = new PlaneGeometry( 680, 384, 399, 224 );
       this.texture = new TextureLoader().load(`/visor/static/pnoa_${ this.escenario }.png`);
       const textureVideo = new VideoTexture( video );
       textureVideo.format = RGBAFormat;
@@ -95,7 +95,7 @@ class App {
       this.textureButton.addEventListener('click', this.changeTexture.bind( this ) );
 
       for (let i = 0; i < data.length; i++) {
-        geometry.attributes.position.array[(i*3) + 2] = data[i] ;
+        geometry.attributes.position.array[(i*3) + 2] = data[i] / 10 ;
       }
 
       const plane = new Mesh(geometry, this.material);

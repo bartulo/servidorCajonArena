@@ -1,6 +1,6 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { io } from 'socket.io-client';
-import {Vector2, Raycaster} from 'three';
+import {Vector2, Raycaster, Vector3} from 'three';
 import { LineSidebar, IconSidebar } from './sidebar';
 
 class OrbitControlsMod extends OrbitControls {
@@ -31,6 +31,7 @@ class OrbitControlsMod extends OrbitControls {
   onMouseDown = ( event ) => {
 
     if ( this.sidebar.state == 'icon' ) { 
+
       const icon = new IconSidebar( this.getIntersection( event ), this.scene, this.sidebar );
       icon.createObject();
       icon.createElement();
@@ -41,8 +42,37 @@ class OrbitControlsMod extends OrbitControls {
       } );
 
     } else if ( this.sidebar.state == 'paint' ) { 
-      console.log( 'paint' ) 
+
+      this.points = [];
+      this.lineSidebar = new LineSidebar( this.scene, this.sidebar );
+
+      this.lineSidebar.createObject();
+      this.scene.add( this.lineSidebar.line );
+      this.domElement.addEventListener('mousemove', this.onMouseMove );
+      this.domElement.addEventListener('mouseup', this.onMouseUp );
     }
+  }
+
+  onMouseMove = ( event ) => {
+
+    const point = this.getIntersection( event );
+    this.points.push( new Vector3( point.x, point.y + .3, point.z ) );
+    this.lineSidebar.line.geometry.setFromPoints( this.points );
+  }
+
+  onMouseUp = ( ) => {
+
+    this.socket.emit( 'linea', {
+      positions: this.points,
+      red: this.lineSidebar.line.material.color.r,
+      green: this.lineSidebar.line.material.color.g,
+      blue: this.lineSidebar.line.material.color.b,
+      id: this.sidebar.lineId
+    });
+
+    this.lineSidebar.createElement();
+    this.domElement.removeEventListener('mousemove', this.onMouseMove );
+    this.domElement.removeEventListener('mouseup', this.onMouseUp );
   }
 
   getIntersection = ( event ) => {
