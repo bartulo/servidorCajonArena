@@ -1,8 +1,11 @@
 import JsTabs from 'js-tabs';
 import 'js-tabs/src/_js-tabs-base.scss';
-import { BufferGeometry, LineBasicMaterial, Line, Group, BufferAttribute } from 'three';
+import { BufferGeometry, LineBasicMaterial, Line, Group, BufferAttribute, Mesh } from 'three';
 import {CSS2DObject} from 'three/examples/jsm/renderers/CSS2DRenderer';
 import {io} from 'socket.io-client';
+import { MeshLine } from './meshline/meshline';
+import { MeshLineMaterial } from './meshline/material';
+
 
 class Sidebar {
   constructor () {
@@ -127,19 +130,16 @@ class LineSidebar {
 
   createObject = () => {
 
-    console.log( this );
-    const geometry = new BufferGeometry();
+    const geometry = new MeshLine();
 
-    let matLine = new LineBasicMaterial( {
+    let matLine = new MeshLineMaterial( {
       color: this.sidebar.color,
-      linewidth: 2,
-      alphaToCoverage: true
+      lineWidth: 2,
     } );
 
-    let line = new Line( geometry, matLine );
-    line.scale.set( 1, 1, 1 );
-    line.frustumCulled = false;
-    this.line = line;
+    this.line = new Mesh( geometry, matLine );
+    this.line.scale.set( 1, 1, 1 );
+    this.line.frustumCulled = false;
 
   }
 
