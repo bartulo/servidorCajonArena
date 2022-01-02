@@ -13,7 +13,6 @@ import {
   Color
 } from 'three';
 
-//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import { io } from 'socket.io-client';
 
@@ -22,8 +21,8 @@ import TerrainMaterial from './terrainMaterial';
 import { OrbitControlsMod } from './OrbitControlsMod';
 import { Sidebar } from './sidebar.js';
 
-import Mdt from './images/mdt.bin';
-require.context('./images', true, /\.png$/)
+require.context('./images', true, /\.(png|bin)$/)
+import Config from './config/config.json';
 import './css/sidebar.css';
 import './icons/style.css';
 
@@ -33,10 +32,11 @@ class App {
 	init() {
 
     this.escenario = window.location.pathname.split('/')[2];
+    this.config = Config.filter( obj => obj.name === this.escenario )[0];
     this.socket = io();
     const video = document.createElement('video');
     video.style['display'] = 'none';
-    video.src = 'images/faja_transparente4.webm';
+    video.src = `images/video_${ this.escenario }.webm`;
     const body = document.body;
     body.appendChild( video );
     this.sidebar = new Sidebar();
@@ -71,8 +71,9 @@ class App {
     controls.maxPolarAngle = Math.PI / 2;
 
     var terrainLoader = new TerrainLoader();
-    terrainLoader.load(Mdt, ( data ) => {
-      const geometry = new PlaneGeometry( 680, 384, 399, 224 );
+    terrainLoader.load(`/visor/static/mdt_${ this.escenario }.bin`, ( data ) => {
+      console.log( data );
+      const geometry = new PlaneGeometry( 680, 384, this.config.meshWidth - 1, this.config.meshHeight - 1 );
       this.texture = new TextureLoader().load(`/visor/static/pnoa_${ this.escenario }.png`);
       const textureVideo = new VideoTexture( video );
       textureVideo.format = RGBAFormat;
@@ -95,7 +96,7 @@ class App {
       this.textureButton.addEventListener('click', this.changeTexture.bind( this ) );
 
       for (let i = 0; i < data.length; i++) {
-        geometry.attributes.position.array[(i*3) + 2] = data[i] / 10 ;
+        geometry.attributes.position.array[(i*3) + 2] = data[i] * 1.2 / ( ( this.config.widthKm * 1000 / 680 ) ) ;
       }
 
       const plane = new Mesh(geometry, this.material);

@@ -11,7 +11,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(png|svg|jpg|jpeg|gif|bin|webm|eot|ttf|woff|fs|vs)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|bin|webm|fs|vs)$/i,
         use: [
           {
             loader: 'file-loader',
@@ -22,6 +22,10 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.(eot|ttf|woff)$/i,
+        type: 'asset/resource',
       },
       {
         test: /\.css$/,
