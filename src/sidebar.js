@@ -8,11 +8,11 @@ import { MeshLineMaterial } from './meshline/material';
 
 
 class Sidebar {
-  constructor () {
+  constructor ( socket ) {
     this.menu = document.querySelector('#menuIcon');
     this.sidenav = document.querySelector('#sidenav');
     this.closeButton = document.querySelector('.closebtn');
-    this.socket = io();
+    this.socket = socket;
     this.state = null;
     this.color = '#ffd700';
     this.icon = 'binoculars';

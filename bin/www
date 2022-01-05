@@ -91,6 +91,8 @@ function onListening() {
 }
 
 io.on( 'connection', ( socket ) => {
+  console.log(io.of("/").sockets);
+  io.emit('numClients', io.of('/socket.io/').sockets );
   socket.on('tecla', ( tecla ) => {
     io.emit( 'tecla', tecla );
   });
@@ -112,4 +114,11 @@ io.on( 'connection', ( socket ) => {
   socket.on('skipTo', ( skipTo ) => {
     io.emit( 'skipTo', skipTo );
   });
+  socket.on('openUrl', (e) => {
+    require('child_process').exec(`firefox --kiosk http://localhost:3000/proyector/${ e }`);
+  });
+  socket.on('disconnect', () => {
+    io.emit('numClients', io.engine.clientsCount );
+  });
+
 });

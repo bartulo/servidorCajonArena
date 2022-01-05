@@ -1,0 +1,17 @@
+[
+  {
+    "name": "tortuero",
+    "meshWidth": 400, 
+    "meshHeight": 225,
+    "widthKm": 7
+  },
+
+  {
+    "name": "navalcan",
+    "meshWidth": 376, 
+    "meshHeight": 212,
+    "widthKm": 9
+  }
+]
+
+

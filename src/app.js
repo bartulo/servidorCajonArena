@@ -21,7 +21,7 @@ import TerrainMaterial from './terrainMaterial';
 import { OrbitControlsMod } from './OrbitControlsMod';
 import { Sidebar } from './sidebar.js';
 
-require.context('./images', true, /\.(png|bin)$/)
+require.context('./images', true, /\.(png|bin|webm)$/)
 import Config from './config/config.json';
 import './css/sidebar.css';
 import './icons/style.css';
@@ -36,10 +36,10 @@ class App {
     this.socket = io();
     const video = document.createElement('video');
     video.style['display'] = 'none';
-    video.src = `images/video_${ this.escenario }.webm`;
+    video.src = `/visor/static/video_${ this.escenario }.webm`;
     const body = document.body;
     body.appendChild( video );
-    this.sidebar = new Sidebar();
+    this.sidebar = new Sidebar( this.socket );
     this.sidebar.init();
 
 
@@ -65,7 +65,7 @@ class App {
 
 		window.addEventListener( 'resize', this.onWindowResize.bind( this ), false );
 
-		const controls = new OrbitControlsMod( this.camera, this.renderer.domElement, this.scene, this.sidebar );
+		const controls = new OrbitControlsMod( this.camera, this.renderer.domElement, this.scene, this.sidebar, this.socket );
 
     controls.screenSpacePanning = false;
     controls.maxPolarAngle = Math.PI / 2;

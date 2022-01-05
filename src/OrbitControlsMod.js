@@ -1,15 +1,14 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { io } from 'socket.io-client';
 import {Vector2, Raycaster, Vector3, Color} from 'three';
 import { LineSidebar, IconSidebar } from './sidebar';
 
 class OrbitControlsMod extends OrbitControls {
 
-  constructor( object, domElement, scene, sidebar ) {
+  constructor( object, domElement, scene, sidebar, socket ) {
 
     super( object, domElement );
     this.camera = object;
-    this.socket = io();
+    this.socket = socket;
     this.scene = scene;
     this.sidebar = sidebar;
     this.sidebar.sidenav.addEventListener( 'openSidebar', this.openSidebar );

@@ -2,20 +2,34 @@
   <Metadata domain="IMAGE_STRUCTURE">
     <MDI key="INTERLEAVE">BAND</MDI>
   </Metadata>
-  <Metadata domain="ENVI">
-    <MDI key="bands">1</MDI>
-    <MDI key="byte_order">0</MDI>
-    <MDI key="data_type">2</MDI>
-    <MDI key="file_type">ENVI Standard</MDI>
-    <MDI key="header_offset">0</MDI>
-    <MDI key="interleave">bsq</MDI>
-    <MDI key="lines">212</MDI>
-    <MDI key="samples">376</MDI>
-  </Metadata>
   <Metadata>
     <MDI key="AREA_OR_POINT">Area</MDI>
+    <MDI key="Band_1">Band 1</MDI>
     <MDI key="TIFFTAG_RESOLUTIONUNIT">2 (pixels/inch)</MDI>
     <MDI key="TIFFTAG_XRESOLUTION">72</MDI>
     <MDI key="TIFFTAG_YRESOLUTION">72</MDI>
   </Metadata>
+  <Metadata domain="ENVI">
+    <MDI key="bands">1</MDI>
+    <MDI key="band_names">{Band 1}</MDI>
+    <MDI key="byte_order">0</MDI>
+    <MDI key="coordinate_system_string">{PROJCS["ETRS89_UTM_zone_30N",GEOGCS["GCS_ETRS_1989",DATUM["D_ETRS_1989",SPHEROID["GRS_1980",6378137,298.257222101]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-3],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["Meter",1]]}</MDI>
+    <MDI key="data_type">2</MDI>
+    <MDI key="description">{mdt_navalcan.bin}</MDI>
+    <MDI key="file_type">ENVI Standard</MDI>
+    <MDI key="header_offset">0</MDI>
+    <MDI key="interleave">bsq</MDI>
+    <MDI key="lines">212</MDI>
+    <MDI key="map_info">{UTM, 1, 1, 321353.37107217, 4443578.1077041, 25, 25, 30, North}</MDI>
+    <MDI key="samples">376</MDI>
+  </Metadata>
+  <PAMRasterBand band="1">
+    <Description>Band 1</Description>
+    <Metadata>
+      <MDI key="STATISTICS_MAXIMUM">645</MDI>
+      <MDI key="STATISTICS_MEAN">515.87547671617</MDI>
+      <MDI key="STATISTICS_MINIMUM">351</MDI>
+      <MDI key="STATISTICS_STDDEV">48.609269431272</MDI>
+    </Metadata>
+  </PAMRasterBand>
 </PAMDataset>

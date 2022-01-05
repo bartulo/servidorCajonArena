@@ -6,7 +6,7 @@
   <script src="/socket.io/socket.io.js"></script>
   <body style="margin: 0px; padding: 0px;">
     <div>
-      <video id="video" style="display: none" src="/images/NAVALCAN/web.webm"></video>
+      <video id="video" style="display: none" src="/images/{{ localizacion }}/web.webm"></video>
     </div>
     <canvas id="canvas" width="1920" height="1076"></canvas>
   <script>
@@ -222,6 +222,10 @@
       setTimeout( function() {
         canvas.draw();
       }, 100 );
+    });
+
+    socket.on('fullscreen', function () {
+      document.body.requestFullscreen();
     });
 
   </script>
