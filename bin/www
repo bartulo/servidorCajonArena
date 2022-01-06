@@ -94,16 +94,16 @@ io.on( 'connection', ( socket ) => {
   console.log(io.of("/").sockets);
   io.emit('numClients', io.of('/socket.io/').sockets );
   socket.on('tecla', ( tecla ) => {
-    io.emit( 'tecla', tecla );
+    socket.broadcast.emit( 'tecla', tecla );
   });
   socket.on('linea', ( positions ) => {
     io.emit( 'linea', positions );
   });
   socket.on('icon', ( coords ) => {
-    io.emit( 'icon', coords );
+    socket.broadcast.emit( 'icon', coords );
   });
   socket.on('remove', ( id ) => {
-    io.emit( 'remove', id );
+    socket.broadcast.emit( 'remove', id );
   });
   socket.on('playVideo', ( ) => {
     io.emit( 'playVideo' );

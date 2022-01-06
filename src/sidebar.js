@@ -9,10 +9,14 @@ import { MeshLineMaterial } from './meshline/material';
 
 class Sidebar {
   constructor ( socket ) {
+    this.socket = socket;
+
+  }
+
+  init () {
     this.menu = document.querySelector('#menuIcon');
     this.sidenav = document.querySelector('#sidenav');
     this.closeButton = document.querySelector('.closebtn');
-    this.socket = socket;
     this.state = null;
     this.color = '#ffd700';
     this.icon = 'binoculars';
@@ -22,9 +26,6 @@ class Sidebar {
     this.pause = document.getElementById('pause');
     this.seek = document.getElementById('seek');
 
-  }
-
-  init () {
     this.menu.addEventListener('click', this.openSidebar.bind(this));
 
     this.closeButton.addEventListener('click', this.closeSidebar.bind(this))
@@ -183,18 +184,28 @@ class LineSidebar {
     this.elem.remove();
     this.scene.remove( this.line );
     this.sidebar.socket.emit( 'remove', {'id': this._id, 'type': 'line' } );
+    this.sidebar.controls.dispatchEvent({ type: 'change' });
   }
 
 }
 
 class IconSidebar {
 
-  constructor ( position, scene, sidebar ) {
+  constructor ( position, scene, sidebar, data ) {
     this.position = position;
     this._id = IconSidebar.incrementId();
     this.scene = scene;
     this.sidebar = sidebar;
     this.sidebar.iconId = this._id;
+    this.viewType = window.location.pathname.split('/')[2];
+    if ( data ) {
+      this.iconType = `icon-${ data.type }`;
+      this.nameId = `icon_${ data._id }`;
+    } else {
+      this.iconType = this.sidebar.iconClass;
+      this.nameId = `icon_${ this._id }`;
+    }
+
   }
 
   static incrementId() {
@@ -224,11 +235,12 @@ class IconSidebar {
     const line = new Line( geometry, lineMaterial );
 
     const group = new Group();
+    group.name = this.nameId;
     group.add( line );
     group.position.set( this.position.x, this.position.y + 10., this.position.z );
 
     const icon = document.createElement( 'div' );
-    icon.classList.add( this.sidebar.iconClass );
+    icon.classList.add( this.iconType );
     icon.style.color = 'white';
     icon.style.fontSize = '30px';
     icon.style['-webkit-text-stroke'] = '1px black';
@@ -277,6 +289,7 @@ class IconSidebar {
     this.label.element.remove();
     this.scene.remove( this.group );
     this.sidebar.socket.emit( 'remove', {'id': this._id, 'type': 'icon' } );
+    this.sidebar.controls.dispatchEvent({ type: 'change' });
 
   }
 

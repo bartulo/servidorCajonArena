@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/proyector', escRouter);
-app.use('/visor', proyRouter);
+app.use('/app', proyRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

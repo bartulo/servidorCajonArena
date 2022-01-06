@@ -1,8 +1,5 @@
 import {
-	PlaneGeometry,
 	Mesh,
-	MeshBasicMaterial,
-  TextureLoader,
 	PerspectiveCamera,
 	Scene,
 	WebGLRenderer,
@@ -10,16 +7,16 @@ import {
   ShaderMaterial,
   WebGL1Renderer,
   RGBAFormat,
-  Color
+  Color,
+  OrthographicCamera
 } from 'three';
 
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import { io } from 'socket.io-client';
 
-import TerrainLoader from './terrain.js';
-import TerrainMaterial from './terrainMaterial';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OrbitControlsMod } from './OrbitControlsMod';
-import { Sidebar } from './sidebar.js';
+import { Sidebar, IconSidebar } from './sidebar.js';
 
 require.context('./images', true, /\.(png|bin|webm)$/)
 import Config from './config/config.json';
@@ -31,7 +28,8 @@ class App {
 
 	init() {
 
-    this.escenario = window.location.pathname.split('/')[2];
+    this.escenario = window.location.pathname.split('/')[3];
+    this.viewType = window.location.pathname.split('/')[2];
     this.config = Config.filter( obj => obj.name === this.escenario )[0];
     this.socket = io();
     const video = document.createElement('video');
@@ -40,14 +38,19 @@ class App {
     const body = document.body;
     body.appendChild( video );
     this.sidebar = new Sidebar( this.socket );
-    this.sidebar.init();
 
+    if ( this.viewType == 'visor' ) {
 
-		this.camera = new PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
-		this.camera.position.set( 0, 800, 0 );
+      this.sidebar.init();
+      this.camera = new PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
+
+    } else if ( this.viewType == 'proyector' ) {
+
+      this.camera = new OrthographicCamera( -1920 / 5.6, 1920 / 5.6, 1080 / 5.6, -1080 / 5.6, 1, 1000);
+    }
+    this.camera.position.set( 0, 700, 0 );
 
 		this.scene = new Scene();
-    this.scene.background = 'black';
 
 		this.renderer = new WebGL1Renderer( { antialias: true, alpha: true } );
 		this.renderer.setPixelRatio( window.devicePixelRatio );
@@ -62,50 +65,66 @@ class App {
     this.labelRenderer.domElement.style.pointerEvents = 'none';
 		document.body.appendChild( this.labelRenderer.domElement );
 
-
 		window.addEventListener( 'resize', this.onWindowResize.bind( this ), false );
 
-		const controls = new OrbitControlsMod( this.camera, this.renderer.domElement, this.scene, this.sidebar, this.socket );
+    if ( this.viewType == 'visor' ) {
+      const controls = new OrbitControlsMod( this.camera, this.renderer.domElement, this.scene, this.sidebar, this.socket );
 
-    controls.screenSpacePanning = false;
-    controls.maxPolarAngle = Math.PI / 2;
+      controls.screenSpacePanning = false;
+      controls.maxPolarAngle = Math.PI / 2;
+      controls.addEventListener('change', this.render.bind( this ) );
+    } else if ( this.viewType == 'proyector' ) {
+      const controls = new OrbitControls( this.camera, this.renderer.domElement );
+      controls.enabled = false;
+    }
 
-    var terrainLoader = new TerrainLoader();
-    terrainLoader.load(`/visor/static/mdt_${ this.escenario }.bin`, ( data ) => {
-      console.log( data );
-      const geometry = new PlaneGeometry( 680, 384, this.config.meshWidth - 1, this.config.meshHeight - 1 );
-      this.texture = new TextureLoader().load(`/visor/static/pnoa_${ this.escenario }.png`);
-      const textureVideo = new VideoTexture( video );
-      textureVideo.format = RGBAFormat;
-      this.texture.transparent = true;
+    const textureVideo = new VideoTexture( video );
+    textureVideo.format = RGBAFormat;
+    this.texture.transparent = true;
 
-      this.texture2 = new TextureLoader().load(`/visor/static/topo_${ this.escenario }.png`);
+    var uniforms = {
+      texture: { type: 't', value: this.texture },
+      texture2: { type: 't', value: textureVideo }
+    }
+    this.material = new ShaderMaterial({
+      uniforms: uniforms,
+      vertexShader: document.getElementById( 'vertex_shader' ).textContent,
+      fragmentShader: document.getElementById( 'fragment_shader' ).textContent
+    });
 
-      var uniforms = {
-        texture: { type: 't', value: this.texture },
-        texture2: { type: 't', value: textureVideo }
-      }
-      this.material = new ShaderMaterial({
-        uniforms: uniforms,
-        vertexShader: document.getElementById( 'vertex_shader' ).textContent,
-        fragmentShader: document.getElementById( 'fragment_shader' ).textContent
-      });
-
+    if ( this.viewType == 'visor' ) {
       this.textureButton = document.querySelector('.textureButton')
 
       this.textureButton.addEventListener('click', this.changeTexture.bind( this ) );
+    }
 
-      for (let i = 0; i < data.length; i++) {
-        geometry.attributes.position.array[(i*3) + 2] = data[i] * 1.2 / ( ( this.config.widthKm * 1000 / 680 ) ) ;
-      }
+    const plane = new Mesh(this.geometry, this.material);
+    plane.rotation.set( Math.PI / 2, Math.PI, Math.PI );
+    this.scene.add(plane);
+    this.render();
 
-      const plane = new Mesh(geometry, this.material);
-      plane.rotation.set( Math.PI / 2, Math.PI, Math.PI );
-      this.scene.add(plane);
+    this.socket.on( 'icon', ( data ) => {
+      const icon = new IconSidebar( data.coords, this.scene, this.sidebar, data );
+      icon.createObject();
+      this.render();
+    });
+// TODO poner nombre de socket para borrar el icono adecuado
+    this.socket.on( 'remove', ( id ) => {
+      const icon = this.scene.getObjectByName( `${ id.type }_${ id.id }` );
+      icon.children[1].element.remove();
+      this.scene.remove( icon );
+      console.log( this.scene.children );
+      this.render();
     });
 
-		this.animate();
-
+    this.socket.on('tecla', ( data ) => {
+      if ( data == 'topo' ) {
+        this.material.uniforms.texture.value = this.texture2;
+      } else if ( data == 'pnoa' ) {
+        this.material.uniforms.texture.value = this.texture;
+      }
+      this.render();
+    });
 	}
 
   onWindowResize() {
@@ -116,11 +135,12 @@ class App {
     this.renderer.setSize( window.innerWidth, window.innerHeight );
     this.labelRenderer.setSize( window.innerWidth, window.innerHeight );
 
+    this.render();
+
   }
 
-  animate() {
+  render() {
 
-    requestAnimationFrame( this.animate.bind( this ) );
     this.renderer.render( this.scene, this.camera );
     this.labelRenderer.render( this.scene, this.camera );
 
@@ -141,6 +161,7 @@ class App {
       this.textureButton.innerHTML = 'Topo';
 
     }
+    this.render();
   }
 
 }

@@ -1,5 +1,5 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import {Vector2, Raycaster, Vector3, Color} from 'three';
+import { Vector2, Raycaster, Vector3 } from 'three';
 import { LineSidebar, IconSidebar } from './sidebar';
 
 class OrbitControlsMod extends OrbitControls {
@@ -11,6 +11,7 @@ class OrbitControlsMod extends OrbitControls {
     this.socket = socket;
     this.scene = scene;
     this.sidebar = sidebar;
+    this.sidebar.controls = this;
     this.sidebar.sidenav.addEventListener( 'openSidebar', this.openSidebar );
     this.sidebar.sidenav.addEventListener( 'closeSidebar', this.closeSidebar );
   }
@@ -34,6 +35,7 @@ class OrbitControlsMod extends OrbitControls {
       const icon = new IconSidebar( this.getIntersection( event ), this.scene, this.sidebar );
       icon.createObject();
       icon.createElement();
+      this.dispatchEvent({ type: 'change' })
       this.socket.emit( 'icon', { 
         'coords': this.getIntersection( event ), 
         'type': this.sidebar.icon, 
@@ -62,6 +64,7 @@ class OrbitControlsMod extends OrbitControls {
     this.positions.push( new Vector3( point.x, point.y, point.z ) );
     this.lineSidebar.line.geometry.setPoints( this.points );
     this.colors.push( 0.0, 1.0, 1.0 );
+    this.dispatchEvent({ type: 'change' })
   }
 
   onMouseUp = ( ) => {

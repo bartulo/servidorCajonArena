@@ -1,4 +1,4 @@
-import { App } from './app.js';
+import { AssetsLoader } from './loader.js';
 
-const app = new App();
-app.init();
+const l= new AssetsLoader();
+l.init();
