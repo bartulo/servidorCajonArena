@@ -2,7 +2,6 @@ import JsTabs from 'js-tabs';
 import 'js-tabs/src/_js-tabs-base.scss';
 import { BufferGeometry, LineBasicMaterial, Line, Group, BufferAttribute, Mesh } from 'three';
 import {CSS2DObject} from 'three/examples/jsm/renderers/CSS2DRenderer';
-import {io} from 'socket.io-client';
 import { MeshLine } from './meshline/meshline';
 import { MeshLineMaterial } from './meshline/material';
 
@@ -47,12 +46,16 @@ class Sidebar {
 
     this.play.addEventListener('click', () => {
       this.video.play();
+      this.videoStatus = true;
       this.socket.emit('playVideo');
+      this.app.render();
     });
 
     this.pause.addEventListener('click', () => {
       this.video.pause();
+      this.videoStatus = false;
       this.socket.emit('pauseVideo');
+      this.app.render();
     });
 
     this.video.addEventListener('timeupdate', () => {
@@ -114,11 +117,22 @@ class Sidebar {
 }
 
 class LineSidebar {
-  constructor ( scene, sidebar ) {
+  constructor ( scene, sidebar, data ) {
     this._id = LineSidebar.incrementId();
     this.scene = scene;
     this.sidebar = sidebar;
     this.sidebar.lineId = this._id;
+    this.socketId = this.sidebar.socket.id;
+    console.log( this.socketId );
+    if ( data ) { /// Si es una copia a través de Broadcast
+      this.color = data.color;
+      this.nameId = `line_${ data.socketId }_${ data.id }`;
+    } else { // Si es original
+      this.color = this.sidebar.color;
+      this.nameId = `line_${ this.socketId }_${ this._id }`;
+      console.log( this.nameId );
+    }
+
   }
 
   static incrementId() {
@@ -134,11 +148,12 @@ class LineSidebar {
     const geometry = new MeshLine();
 
     let matLine = new MeshLineMaterial( {
-      color: this.sidebar.color,
+      color: this.color,
       lineWidth: 2,
     } );
 
     this.line = new Mesh( geometry, matLine );
+    this.line.name = this.nameId;
     this.line.scale.set( 1, 1, 1 );
     this.line.frustumCulled = false;
 
@@ -183,7 +198,7 @@ class LineSidebar {
 
     this.elem.remove();
     this.scene.remove( this.line );
-    this.sidebar.socket.emit( 'remove', {'id': this._id, 'type': 'line' } );
+    this.sidebar.socket.emit( 'remove', {'id': this._id, 'type': 'line', 'socketId': this.socketId } );
     this.sidebar.controls.dispatchEvent({ type: 'change' });
   }
 
@@ -196,14 +211,15 @@ class IconSidebar {
     this._id = IconSidebar.incrementId();
     this.scene = scene;
     this.sidebar = sidebar;
+    this.socketId = this.sidebar.socket.id;
     this.sidebar.iconId = this._id;
     this.viewType = window.location.pathname.split('/')[2];
-    if ( data ) {
+    if ( data ) { /// Si es una copia a través de Broadcast
       this.iconType = `icon-${ data.type }`;
-      this.nameId = `icon_${ data._id }`;
-    } else {
+      this.nameId = `icon_${ data.socketId }_${ data._id }`;
+    } else { // Si es original
       this.iconType = this.sidebar.iconClass;
-      this.nameId = `icon_${ this._id }`;
+      this.nameId = `icon_${ this.socketId }_${ this._id }`;
     }
 
   }
@@ -288,7 +304,7 @@ class IconSidebar {
     this.elem.remove();
     this.label.element.remove();
     this.scene.remove( this.group );
-    this.sidebar.socket.emit( 'remove', {'id': this._id, 'type': 'icon' } );
+    this.sidebar.socket.emit( 'remove', {'id': this._id, 'type': 'icon', 'socketId': this.socketId } );
     this.sidebar.controls.dispatchEvent({ type: 'change' });
 
   }

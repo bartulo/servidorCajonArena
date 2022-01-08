@@ -39,6 +39,7 @@ class OrbitControlsMod extends OrbitControls {
       this.socket.emit( 'icon', { 
         'coords': this.getIntersection( event ), 
         'type': this.sidebar.icon, 
+        'socketId': icon.socketId,
         _id: this.sidebar.iconId 
       } );
 
@@ -76,11 +77,13 @@ class OrbitControlsMod extends OrbitControls {
 
     this.socket.emit( 'linea', {
       positions: this.positions,
-      red: this.lineSidebar.line.material.color.r,
-      green: this.lineSidebar.line.material.color.g,
-      blue: this.lineSidebar.line.material.color.b,
+      points: this.points,
+      color: this.lineSidebar.color,
+      socketId: this.socket.id,
       id: this.sidebar.lineId
     });
+    
+    console.log( this.scene.children );
 
   }
 

@@ -97,7 +97,7 @@ io.on( 'connection', ( socket ) => {
     socket.broadcast.emit( 'tecla', tecla );
   });
   socket.on('linea', ( positions ) => {
-    io.emit( 'linea', positions );
+    socket.broadcast.emit( 'linea', positions );
   });
   socket.on('icon', ( coords ) => {
     socket.broadcast.emit( 'icon', coords );
@@ -106,13 +106,13 @@ io.on( 'connection', ( socket ) => {
     socket.broadcast.emit( 'remove', id );
   });
   socket.on('playVideo', ( ) => {
-    io.emit( 'playVideo' );
+    socket.broadcast.emit( 'playVideo' );
   });
   socket.on('pauseVideo', ( ) => {
-    io.emit( 'pauseVideo' );
+    socket.broadcast.emit( 'pauseVideo' );
   });
   socket.on('skipTo', ( skipTo ) => {
-    io.emit( 'skipTo', skipTo );
+    socket.broadcast.emit( 'skipTo', skipTo );
   });
   socket.on('openUrl', (e) => {
     require('child_process').exec(`firefox --kiosk http://localhost:3000/proyector/${ e }`);

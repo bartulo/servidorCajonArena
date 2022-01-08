@@ -16,7 +16,7 @@ import { io } from 'socket.io-client';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OrbitControlsMod } from './OrbitControlsMod';
-import { Sidebar, IconSidebar } from './sidebar.js';
+import { Sidebar, IconSidebar, LineSidebar } from './sidebar.js';
 
 require.context('./images', true, /\.(png|bin|webm)$/)
 import Config from './config/config.json';
@@ -32,12 +32,13 @@ class App {
     this.viewType = window.location.pathname.split('/')[2];
     this.config = Config.filter( obj => obj.name === this.escenario )[0];
     this.socket = io();
-    const video = document.createElement('video');
-    video.style['display'] = 'none';
-    video.src = `/visor/static/video_${ this.escenario }.webm`;
+    this.video = document.createElement('video');
+    this.video.style['display'] = 'none';
+    this.video.src = `/visor/static/video_${ this.escenario }.webm`;
     const body = document.body;
-    body.appendChild( video );
+    body.appendChild( this.video );
     this.sidebar = new Sidebar( this.socket );
+    this.sidebar.app = this;
 
     if ( this.viewType == 'visor' ) {
 
@@ -78,7 +79,7 @@ class App {
       controls.enabled = false;
     }
 
-    const textureVideo = new VideoTexture( video );
+    const textureVideo = new VideoTexture( this.video );
     textureVideo.format = RGBAFormat;
     this.texture.transparent = true;
 
@@ -108,12 +109,24 @@ class App {
       icon.createObject();
       this.render();
     });
-// TODO poner nombre de socket para borrar el icono adecuado
+
+    this.socket.on( 'linea', ( data ) => {
+      const line = new LineSidebar ( this.scene, this.sidebar, data );
+      line.createObject();
+      line.line.geometry.setPoints( data.points );
+      this.scene.add( line.line );
+      this.render();
+    });
+
     this.socket.on( 'remove', ( id ) => {
-      const icon = this.scene.getObjectByName( `${ id.type }_${ id.id }` );
-      icon.children[1].element.remove();
-      this.scene.remove( icon );
+      console.log( 'eo' );
+      const elem = this.scene.getObjectByName( `${ id.type }_${ id.socketId }_${ id.id }` );
+      console.log( id.socketId );
       console.log( this.scene.children );
+      if ( id.type == 'icon' ) {
+        elem.children[1].element.remove();
+      }
+      this.scene.remove( elem );
       this.render();
     });
 
@@ -125,6 +138,19 @@ class App {
       }
       this.render();
     });
+
+    this.socket.on( 'playVideo', () => {
+      this.video.play();
+      this.sidebar.videoStatus = true;
+      this.render();
+    });
+
+    this.socket.on( 'pauseVideo', () => {
+      this.video.pause();
+      this.sidebar.videoStatus = false;
+      this.render();
+    });
+
 	}
 
   onWindowResize() {
@@ -141,6 +167,9 @@ class App {
 
   render() {
 
+    if ( this.sidebar.videoStatus ) {
+      requestAnimationFrame( this.render.bind( this ) );
+    }
     this.renderer.render( this.scene, this.camera );
     this.labelRenderer.render( this.scene, this.camera );
 
