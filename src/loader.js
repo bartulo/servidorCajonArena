@@ -14,6 +14,7 @@ class AssetsLoader {
   constructor () {
     this.app = new App();
     this.loc = window.location.pathname.split('/')[3];
+    this.viewType = window.location.pathname.split('/')[2];
     this.config = Config.filter( obj => obj.name === this.loc )[0];
   }
 
@@ -39,20 +40,25 @@ class AssetsLoader {
 
     const terrainLoader = new TerrainLoader();
 
-    promises.push( new Promise( resolve => {
-      terrainLoader.load( `/visor/static/mdt_${ this.loc }.bin`, ( data )=> {
-        console.log( data );
-        console.log( this.config.meshWidth );
-        this.app.geometry = new PlaneGeometry( 680, 384, this.config.meshWidth - 1, this.config.meshHeight - 1);
+    if ( this.viewType == 'visor' ) {
 
-        for ( let i = 0; i < this.config.meshWidth * this.config.meshHeight; i++ ) {
-          this.app.geometry.attributes.position.array[ i * 3 + 2 ] = data[ i ] * 1.2 / ( this.config.widthKm * 1000 / 680 );
-        }
+      promises.push( new Promise( resolve => {
+        terrainLoader.load( `/visor/static/mdt_${ this.loc }.bin`, ( data )=> {
+          this.app.geometry = new PlaneGeometry( 680, 384, this.config.meshWidth - 1, this.config.meshHeight - 1);
 
-        console.log( this.app.geometry.attributes.position );
-        resolve( );
-      });
-    }));
+          for ( let i = 0; i < this.config.meshWidth * this.config.meshHeight; i++ ) {
+            this.app.geometry.attributes.position.array[ i * 3 + 2 ] = data[ i ] * 1.2 / ( this.config.widthKm * 1000 / 680 );
+          }
+
+          resolve( );
+        });
+      }));
+
+    } else {
+
+      this.app.geometry = new PlaneGeometry( 680, 384, 1, 1 );
+
+    }
 
     Promise.all( promises ).then( () => {
       this.app.init();
