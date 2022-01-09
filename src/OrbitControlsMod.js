@@ -19,13 +19,13 @@ class OrbitControlsMod extends OrbitControls {
   openSidebar = () => {
 
     this.enabled = false;
-    this.domElement.addEventListener('mousedown', this.onMouseDown );
+    this.domElement.addEventListener('pointerdown', this.onMouseDown );
   }
 
   closeSidebar = () => {
 
     this.enabled = true;
-    this.domElement.removeEventListener('mousedown', this.onMouseDown );
+    this.domElement.removeEventListener('pointerdown', this.onMouseDown );
   }
 
   onMouseDown = ( event ) => {
@@ -53,8 +53,8 @@ class OrbitControlsMod extends OrbitControls {
 
       this.lineSidebar.createObject();
       this.scene.add( this.lineSidebar.line );
-      this.domElement.addEventListener('mousemove', this.onMouseMove );
-      this.domElement.addEventListener('mouseup', this.onMouseUp );
+      this.domElement.addEventListener('pointermove', this.onMouseMove );
+      this.domElement.addEventListener('pointerup', this.onMouseUp );
     }
   }
 
@@ -72,8 +72,8 @@ class OrbitControlsMod extends OrbitControls {
 
 
     this.lineSidebar.createElement();
-    this.domElement.removeEventListener('mousemove', this.onMouseMove );
-    this.domElement.removeEventListener('mouseup', this.onMouseUp );
+    this.domElement.removeEventListener('pointermove', this.onMouseMove );
+    this.domElement.removeEventListener('pointerup', this.onMouseUp );
 
     this.socket.emit( 'linea', {
       positions: this.positions,
@@ -91,8 +91,18 @@ class OrbitControlsMod extends OrbitControls {
 
     const mouseDownPoint = new Vector2();
 
-    mouseDownPoint.x = ( ( event.clientX + this.domElement.offsetLeft ) / window.innerWidth ) * 2 - 1;
-    mouseDownPoint.y = -( ( event.clientY + this.domElement.offsetTop ) / window.innerHeight ) * 2 + 1;
+    console.log( event );
+    if ( event.constructor.name === 'PointerEvent' ) {
+
+      mouseDownPoint.x = ( ( event.clientX + this.domElement.offsetLeft ) / window.innerWidth ) * 2 - 1;
+      mouseDownPoint.y = -( ( event.clientY + this.domElement.offsetTop ) / window.innerHeight ) * 2 + 1;
+    } else if ( event.constructor.name === 'TouchEvent' ) {
+
+      mouseDownPoint.x = ( ( event.touches[0].clientX + this.domElement.offsetLeft ) / window.innerWidth ) * 2 - 1;
+      mouseDownPoint.y = -( ( event.touches[0].clientY + this.domElement.offsetTop ) / window.innerHeight ) * 2 + 1;
+      console.log( mouseDownPoint );
+    }
+
 
     const ray = new Raycaster();
 

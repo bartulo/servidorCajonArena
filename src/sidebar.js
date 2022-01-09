@@ -25,6 +25,15 @@ class Sidebar {
     this.pause = document.getElementById('pause');
     this.seek = document.getElementById('seek');
 
+    this.video.addEventListener('loadedmetadata', () => { 
+      this.seek.setAttribute( 'max', this.video.duration )
+
+      this.seek.addEventListener('mousemove', ( event ) => {
+        const skipTo = Math.round( ( event.offsetX / event.target.clientWidth ) * this.video.duration );
+        this.seek.setAttribute('data-seek', skipTo);
+      });
+    });
+
     this.menu.addEventListener('click', this.openSidebar.bind(this));
 
     this.closeButton.addEventListener('click', this.closeSidebar.bind(this))
@@ -41,7 +50,6 @@ class Sidebar {
     });
     myTabs.init();
 
-    this.seek.setAttribute('max', 25 );
     this.seek.value = 0;
 
     this.play.addEventListener('click', () => {
@@ -62,16 +70,14 @@ class Sidebar {
       this.seek.value = Math.floor(this.video.currentTime);
     });
 
-    this.seek.addEventListener('mousemove', ( event ) => {
-      const skipTo = Math.round( ( event.offsetX / event.target.clientWidth ) * 26 );
-      this.seek.setAttribute('data-seek', skipTo);
-    });
-
     this.seek.addEventListener('input', ( event ) => {
       const skipTo = event.target.dataset.seek ? event.target.dataset.seek : event.target.value;
       this.video.currentTime = skipTo;
       this.seek.value = skipTo;
       this.socket.emit('skipTo', skipTo);
+      if ( !this.videoStatus ) {
+        this.app.render();
+      }
     });
 
   }

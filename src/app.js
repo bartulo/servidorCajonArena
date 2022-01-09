@@ -35,6 +35,7 @@ class App {
     this.video = document.createElement('video');
     this.video.style['display'] = 'none';
     this.video.src = `/visor/static/video_${ this.escenario }.webm`;
+    this.video.muted = true;
     const body = document.body;
     body.appendChild( this.video );
     this.sidebar = new Sidebar( this.socket );
@@ -150,6 +151,15 @@ class App {
       this.sidebar.videoStatus = false;
       this.render();
     });
+
+    this.socket.on( 'skipTo', ( skipTo ) => {
+      this.video.currentTime = skipTo;
+      this.render();
+    });
+
+    this.video.addEventListener('ended', () => {
+      this.sidebar.videoStatus = false;
+    })
 
 	}
 
