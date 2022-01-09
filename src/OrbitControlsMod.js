@@ -83,15 +83,12 @@ class OrbitControlsMod extends OrbitControls {
       id: this.sidebar.lineId
     });
     
-    console.log( this.scene.children );
-
   }
 
   getIntersection = ( event ) => {
 
     const mouseDownPoint = new Vector2();
 
-    console.log( event );
     if ( event.constructor.name === 'PointerEvent' ) {
 
       mouseDownPoint.x = ( ( event.clientX + this.domElement.offsetLeft ) / window.innerWidth ) * 2 - 1;
@@ -100,7 +97,6 @@ class OrbitControlsMod extends OrbitControls {
 
       mouseDownPoint.x = ( ( event.touches[0].clientX + this.domElement.offsetLeft ) / window.innerWidth ) * 2 - 1;
       mouseDownPoint.y = -( ( event.touches[0].clientY + this.domElement.offsetTop ) / window.innerHeight ) * 2 + 1;
-      console.log( mouseDownPoint );
     }
 
 

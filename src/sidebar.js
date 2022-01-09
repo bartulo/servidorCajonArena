@@ -77,6 +77,7 @@ class Sidebar {
       this.socket.emit('skipTo', skipTo);
       if ( !this.videoStatus ) {
         this.app.render();
+        console.log( 'vs' );
       }
     });
 
@@ -178,23 +179,13 @@ class LineSidebar {
   }
 
   hover = () => {
-    this.interval = setInterval( () => {
-
-      if (this.line.material.visible ) {
-
-        this.line.material.visible = false;
-
-      } else {
-
-        this.line.material.visible = true;
-
-      }
-    }, 160);
+    this.line.material.uniforms.lineWidth.value = 4;
+    this.sidebar.app.render();
   }
 
   unHover = () => {
-    clearInterval( this.interval );
-    this.line.material.visible = true;
+    this.line.material.uniforms.lineWidth.value = 2;
+    this.sidebar.app.render();
   }
 
   erase = () => {
