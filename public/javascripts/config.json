@@ -10,7 +10,21 @@
     "name": "navalcan",
     "meshWidth": 376, 
     "meshHeight": 212,
-    "widthKm": 9
+    "widthKm": 4
+  },
+
+  {
+    "name": "barchin",
+    "meshWidth": 400, 
+    "meshHeight": 225,
+    "widthKm": 5
+  },
+
+  {
+    "name": "tortuero2",
+    "meshWidth": 400, 
+    "meshHeight": 225,
+    "widthKm": 5
   }
 ]
 

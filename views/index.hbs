@@ -1,21 +1,70 @@
 <!DOCTYPE html>
-<script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-    document.querySelector('body').addEventListener('click', (e) => {
-      const anchor = e.target.closest('a');
-      if ( anchor !== null ) {
-        socket.emit('openUrl', anchor.title);
-      }
-    },false);
-socket.on( 'numClients', ( n ) => {
-  console.log(n);
-});
+<html>
+  <head>
+    <link rel="stylesheet" href="/stylesheets/inicio.css" />
+  </head>
+    <script src="/socket.io/socket.io.js"></script>
+      <script>
+        const socket = io();
+        document.querySelector('body').addEventListener('click', (e) => {
+          const anchor = e.target.closest('a');
+          if ( anchor !== null ) {
+            socket.emit('openBrowser', anchor.title);
+          }
+        },false);
+
+        socket.on( 'onload', ( p ) => {
+          console.log( p )
+        });
+
+        socket.on( 'out', (  ) => {
+          let lineas = document.querySelectorAll('.linea');
+          lineas.forEach( ( e ) => {
+            e.children[1].innerHTML = '';
+            const escenario = e.children[0].innerHTML;
+            let enlace = document.createElement( 'a' );
+            enlace.href = `app/visor/${escenario}`;
+            enlace.title = escenario;
+            enlace.target = '_blank';
+            enlace.innerHTML = 'Iniciar';
+            e.children[1].appendChild( enlace );
+          });
+        });
+        socket.on( 'opened', ( elem ) => {
+          let escenario = document.querySelector(`#${elem.escenario}`);
+          let lineas = document.querySelectorAll('.linea');
+          lineas.forEach( ( e ) => {
+            e.children[1].innerHTML = '';
+          });
+          let stop = document.createElement('button');
+          stop.innerHTML = 'Parar';
+          escenario.appendChild( stop );
+          stop.addEventListener( 'click', () => {
+            console.log( this );
+            socket.emit( 'stop', elem.pid );
+          });
+    });
   </script>
-<ul>
-  {{#each datos}}
-  <li>
-    <a href="http://localhost:3000/visor/{{this.name}}" title={{ this.name }} target="_blank">{{this.name}}</a>
-  </li>
-  {{/each}}
-</ul>
+  <body>
+
+  <div class="lista">
+    <table class="escenarios">
+      <tr>
+        <th>Escenario</th>
+        <th>Estado</th>
+      </tr>
+      
+        {{#each datos}}
+      <tr class="linea">
+        <td>{{this.name}}</td>
+        <td id={{this.name}}>
+          <a href="app/visor/{{this.name}}" title={{ this.name }} target="_blank">Iniciar</a>
+        </td>
+      </tr>
+        {{/each}}
+    </table>
+  </div>
+
+  </body>
+
+</html>
