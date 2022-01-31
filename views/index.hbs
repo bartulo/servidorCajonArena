@@ -13,11 +13,21 @@
           }
         },false);
 
-        socket.on( 'onload', ( p ) => {
-          console.log( p )
-        });
+        const escenarioActivo = function( escena, pid ) {
+          let escenario = document.querySelector(`#${escena}`);
+          let lineas = document.querySelectorAll('.linea');
+          lineas.forEach( ( e ) => {
+            e.children[1].innerHTML = '';
+          });
+          let stop = document.createElement('button');
+          stop.innerHTML = 'Parar';
+          escenario.appendChild( stop );
+          stop.addEventListener( 'click', () => {
+            socket.emit( 'stop', pid );
+          });
+        };
 
-        socket.on( 'out', (  ) => {
+        const rellenarTD = function() {
           let lineas = document.querySelectorAll('.linea');
           lineas.forEach( ( e ) => {
             e.children[1].innerHTML = '';
@@ -29,21 +39,24 @@
             enlace.innerHTML = 'Iniciar';
             e.children[1].appendChild( enlace );
           });
+        };
+
+        socket.on( 'onload', ( p ) => {
+          if ( p.proyector ) {
+            escenarioActivo( p.escenario, p.pid );
+          } else {
+            rellenarTD();
+          }
         });
+
+        socket.on( 'out', (  ) => {
+          rellenarTD();
+        });
+
         socket.on( 'opened', ( elem ) => {
-          let escenario = document.querySelector(`#${elem.escenario}`);
-          let lineas = document.querySelectorAll('.linea');
-          lineas.forEach( ( e ) => {
-            e.children[1].innerHTML = '';
-          });
-          let stop = document.createElement('button');
-          stop.innerHTML = 'Parar';
-          escenario.appendChild( stop );
-          stop.addEventListener( 'click', () => {
-            console.log( this );
-            socket.emit( 'stop', elem.pid );
-          });
-    });
+          socket.emit('sendPID', elem.pid);
+          escenarioActivo( elem.escenario, elem.pid );
+        });
   </script>
   <body>
 
@@ -58,7 +71,6 @@
       <tr class="linea">
         <td>{{this.name}}</td>
         <td id={{this.name}}>
-          <a href="app/visor/{{this.name}}" title={{ this.name }} target="_blank">Iniciar</a>
         </td>
       </tr>
         {{/each}}

@@ -32,7 +32,7 @@ class App {
     this.viewType = window.location.pathname.split('/')[2];
     this.config = Config.filter( obj => obj.name === this.escenario )[0];
     this.socket = io( );
-    this.socket.emit( 'data', this.viewType ); 
+    this.socket.emit( 'data', { tipo: this.viewType, escenario: this.escenario } ); 
     this.video = document.createElement('video');
     this.video.style['display'] = 'none';
     this.video.src = `/visor/static/video_${ this.escenario }.webm`;

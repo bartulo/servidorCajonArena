@@ -94,21 +94,30 @@ const clientes = async function( io ) {
   const c = await io.fetchSockets();
 
   let proyector = false;
+  let escenario = null;
+  let pid = 0;
   c.forEach( elem => {
     if ( elem.data.tipo === 'proyector' ) {
       proyector = true;
+      escenario = elem.data.escenario;
+      pid = elem.data.pid;
     }
   });
-  return proyector;
+  return { proyector: proyector, escenario: escenario, pid: pid };
 }
+
+let pidG = 0;
 
 io.on( 'connection', ( socket ) => {
 
   clientes( io ).then( ( v ) => {
     socket.emit('onload', v );
   });
-  socket.on('data', (tipo) => {
-    socket.data.tipo = tipo;
+  socket.on('data', ( elem ) => {
+    socket.data.tipo = elem.tipo;
+    socket.data.escenario = elem.escenario;
+    socket.data.pid = pidG;
+    console.log('data: ', socket.data);
   });
   socket.on('tecla', ( tecla ) => {
     socket.broadcast.emit( 'tecla', tecla );
@@ -133,12 +142,12 @@ io.on( 'connection', ( socket ) => {
   });
   socket.on('openBrowser', (e) => {
     process.env['DISPLAY'] = ':0';
-//    require('child_process').exec(`firefox --kiosk http://localhost:3000/app/proyector/${ e }`);
     var spawn = require('child_process').spawn
     var child = spawn("firefox", ["--kiosk", "http://localhost:3000/app/proyector/" + e], {detached: true});
     var pidof = child.pid;
     socket.data.pid = pidof;
-    socket.emit('opened', {pid: pidof, escenario: e});
+    pidG = pidof;
+    io.emit('opened', {pid: pidof, escenario: e});
   });
   socket.on('stop', (pid) => {
     process.kill(-pid);
