@@ -6,16 +6,11 @@
     <script src="/socket.io/socket.io.js"></script>
       <script>
         const socket = io();
-        document.querySelector('body').addEventListener('click', (e) => {
-          const anchor = e.target.closest('a');
-          if ( anchor !== null ) {
-            socket.emit('openBrowser', anchor.title);
-          }
-        },false);
 
         const escenarioActivo = function( escena, pid ) {
           let escenario = document.querySelector(`#${escena}`);
           let lineas = document.querySelectorAll('.linea');
+          console.log( pid );
           lineas.forEach( ( e ) => {
             e.children[1].innerHTML = '';
           });
@@ -38,6 +33,9 @@
             enlace.target = '_blank';
             enlace.innerHTML = 'Iniciar';
             e.children[1].appendChild( enlace );
+            enlace.addEventListener( 'click', () => {
+              socket.emit( 'openBrowser', escenario );
+            });
           });
         };
 

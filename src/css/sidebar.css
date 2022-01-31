@@ -154,13 +154,6 @@
   box-shadow: 2px 2px 6px 3px #e60000 inset;
 }
 
-.icon > li:nth-child(1) a {
-  background-image: url('../images/iconos/camion.png');
-  background-size: 50px 50px;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
 .icon > li:nth-child(2) a {
   background-image: url('../images/iconos/helicoptero.png');
   background-size: 50px 50px;
