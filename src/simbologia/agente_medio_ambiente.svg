@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="62.689198mm"
+   height="54.29044mm"
+   viewBox="0 0 62.689198 54.29044"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="agente_medio_ambiente.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.959798"
+     inkscape:cx="166.36853"
+     inkscape:cy="109.96727"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1015"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-12.754873,-4.2276278)">
+    <path
+       sodipodi:type="star"
+       id="path821"
+       sodipodi:sides="3"
+       sodipodi:cx="-44.099471"
+       sodipodi:cy="-22.313742"
+       sodipodi:r1="35.028625"
+       sodipodi:r2="17.514313"
+       sodipodi:arg1="0.52359878"
+       sodipodi:arg2="1.5707963"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m -13.763793,-4.7994288 -60.671359,-3e-7 30.33568,-52.5429379 z"
+       style="fill:none;stroke:#000000;stroke-width:1.16499996;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       transform="scale(-1)"
+       inkscape:transform-center-y="8.7571556" />
+    <g
+       aria-label="AMA"
+       style="font-style:normal;font-weight:normal;font-size:13.00938797px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.32523471"
+       id="text1594">
+      <path
+         d="m 33.962123,17.990006 -1.740514,4.719714 h 3.48738 z M 33.237967,16.72591 h 1.454663 l 3.614425,9.483895 H 36.973084 L 36.10918,23.776897 h -4.275058 l -0.863905,2.432908 H 29.61719 Z"
+         style="stroke-width:0.32523471"
+         id="path1676" />
+      <path
+         d="m 39.685491,16.72591 h 1.912024 l 2.420204,6.453876 2.432908,-6.453876 h 1.912024 v 9.483895 H 47.11126 v -8.327787 l -2.445613,6.504694 H 43.376142 L 40.93053,17.882018 v 8.327787 h -1.245039 z"
+         style="stroke-width:0.32523471"
+         id="path1678" />
+      <path
+         d="m 54.08602,17.990006 -1.740514,4.719714 h 3.48738 z M 53.361865,16.72591 h 1.454663 l 3.614424,9.483895 h -1.33397 L 56.233077,23.776897 H 51.95802 l -0.863905,2.432908 h -1.353027 z"
+         style="stroke-width:0.32523471"
+         id="path1680" />
+    </g>
+  </g>
+</svg>

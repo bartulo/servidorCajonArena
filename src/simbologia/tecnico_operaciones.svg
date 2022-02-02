@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="62.689198mm"
+   height="54.29044mm"
+   viewBox="0 0 62.689198 54.29044"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="tecnico_operaciones.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.959798"
+     inkscape:cx="166.36853"
+     inkscape:cy="109.96727"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1015"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-12.754873,-4.2276278)">
+    <path
+       sodipodi:type="star"
+       id="path821"
+       sodipodi:sides="3"
+       sodipodi:cx="-44.099471"
+       sodipodi:cy="-22.313742"
+       sodipodi:r1="35.028625"
+       sodipodi:r2="17.514313"
+       sodipodi:arg1="0.52359878"
+       sodipodi:arg2="1.5707963"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m -13.763793,-4.7994288 -60.671359,-3e-7 30.33568,-52.5429379 z"
+       style="fill:none;stroke:#000000;stroke-width:1.16499996;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       transform="scale(-1)"
+       inkscape:transform-center-y="8.7571556" />
+    <g
+       aria-label="TOP"
+       style="font-style:normal;font-weight:normal;font-size:13.00938797px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.32523471"
+       id="text1594">
+      <path
+         d="m 31.214694,17.327266 h 8.02288 v 1.079881 h -3.366688 v 8.404014 h -1.289505 v -8.404014 h -3.366687 z"
+         style="stroke-width:0.32523471"
+         id="path1653" />
+      <path
+         d="m 44.33207,18.197523 q -1.397493,0 -2.223284,1.041768 -0.819439,1.041767 -0.819439,2.839451 0,1.791332 0.819439,2.833099 0.825791,1.041768 2.223284,1.041768 1.397493,0 2.21058,-1.041768 0.819439,-1.041767 0.819439,-2.833099 0,-1.797684 -0.819439,-2.839451 -0.813087,-1.041768 -2.21058,-1.041768 z m 0,-1.041767 q 1.994604,0 3.188825,1.340323 1.194221,1.33397 1.194221,3.582663 0,2.242341 -1.194221,3.582664 -1.194221,1.33397 -3.188825,1.33397 -2.000955,0 -3.201529,-1.33397 -1.194221,-1.333971 -1.194221,-3.582664 0,-2.248693 1.194221,-3.582663 1.200574,-1.340323 3.201529,-1.340323 z"
+         style="stroke-width:0.32523471"
+         id="path1655" />
+      <path
+         d="m 52.005576,18.381738 v 3.563607 h 1.613469 q 0.895666,0 1.384789,-0.463714 0.489122,-0.463713 0.489122,-1.321265 0,-0.851201 -0.489122,-1.314914 -0.489123,-0.463714 -1.384789,-0.463714 z m -1.283152,-1.054472 h 2.896621 q 1.594413,0 2.407499,0.724156 0.819439,0.717803 0.819439,2.108944 0,1.403845 -0.819439,2.121648 -0.813086,0.717803 -2.407499,0.717803 h -1.613469 v 3.811344 h -1.283152 z"
+         style="stroke-width:0.32523471"
+         id="path1657" />
+    </g>
+  </g>
+</svg>

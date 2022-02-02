@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="62.689198mm"
+   height="54.29044mm"
+   viewBox="0 0 62.689198 54.29044"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="zona_segura.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="-81.332675"
+     inkscape:cy="54.021046"
+     inkscape:document-units="mm"
+     inkscape:current-layer="text1376"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1015"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-12.754873,-4.2276278)">
+    <ellipse
+       style="fill:none;stroke:#000000;stroke-width:1.33863306;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path1368"
+       cx="43.728645"
+       cy="32.168037"
+       rx="26.215"
+       ry="26.21525" />
+    <g
+       aria-label="V"
+       transform="scale(1.0480353,0.95416633)"
+       style="font-style:normal;font-weight:normal;font-size:34.91419983px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.87285495"
+       id="text1376">
+      <g
+         aria-label="S"
+         transform="scale(0.97604779,1.02454)"
+         style="font-style:normal;font-weight:normal;font-size:30.34553909px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.66218138"
+         id="text1418">
+        <path
+           d="m 48.749012,22.330537 v 2.91898 q -1.703973,-0.814943 -3.215323,-1.215007 -1.51135,-0.400063 -2.91898,-0.400063 -2.444831,0 -3.778376,0.948298 -1.318727,0.948298 -1.318727,2.696723 0,1.466898 0.874213,2.222573 0.889029,0.740858 3.348677,1.20019 l 1.807694,0.370429 q 3.348677,0.637138 4.934113,2.252208 1.600253,1.600253 1.600253,4.296976 0,3.215323 -2.163305,4.874845 -2.148488,1.659521 -6.312109,1.659521 -1.570619,0 -3.348678,-0.355611 -1.763242,-0.355612 -3.659838,-1.052019 v -3.081968 q 1.822511,1.022384 3.570935,1.540984 1.748425,0.518601 3.437581,0.518601 2.563368,0 3.956181,-1.007567 1.392813,-1.007567 1.392813,-2.874529 0,-1.629887 -1.007567,-2.548551 -0.992749,-0.918664 -3.274592,-1.377996 l -1.82251,-0.355611 q -3.348678,-0.666772 -4.845211,-2.08922 -1.496533,-1.422447 -1.496533,-3.956181 0,-2.933797 2.059585,-4.622953 2.074402,-1.689156 5.704606,-1.689156 1.555802,0 3.170872,0.281526 1.61507,0.281526 3.304226,0.844578 z"
+           style="stroke-width:0.66218138"
+           id="path1536" />
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="62.689198mm"
+   height="54.29044mm"
+   viewBox="0 0 62.689198 54.29044"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="avion_carga_en_tierra.svg">
+  <defs
+     id="defs2">
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="69.847043"
+       height="62.495195"
+       patternTransform="matrix(0.26458333,0,0,0.26458333,34.968632,34.309576)"
+       id="pattern1012">
+      <text
+         transform="scale(1.0554185,0.94749145)"
+         id="text825"
+         y="65.958588"
+         x="-8.8798895"
+         style="font-style:normal;font-weight:normal;font-size:90.47768402px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.26194191"
+         xml:space="preserve"><tspan
+           style="stroke-width:2.26194191"
+           y="65.958588"
+           x="-8.8798895"
+           id="tspan823"
+           sodipodi:role="line">EI</tspan></text>
+    </pattern>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="140.17396"
+     inkscape:cy="77.458912"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1015"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-12.754873,-4.2276278)">
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:1.07016671;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2458"
+       width="37.318012"
+       height="37.318012"
+       x="-9.5355854"
+       y="35.045864"
+       transform="rotate(-45)" />
+    <g
+       aria-label="ACT"
+       style="font-style:normal;font-weight:normal;font-size:16.48824501px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.41220611"
+       id="text2462">
+      <path
+         d="m 33.445102,26.557087 -2.205947,5.981819 h 4.419944 z m -0.917803,-1.602129 h 1.843656 l 4.580963,12.019995 H 37.261229 L 36.166306,33.891458 H 30.74805 l -1.094923,3.083495 h -1.714841 z"
+         style="stroke-width:0.41220611"
+         id="path3214" />
+      <path
+         d="m 49.410038,25.880811 v 1.714842 q -0.821191,-0.764835 -1.755096,-1.143228 -0.925853,-0.378392 -1.972471,-0.378392 -2.06103,0 -3.155953,1.263991 -1.094922,1.255941 -1.094922,3.639008 0,2.375015 1.094922,3.639007 1.094923,1.25594 3.155953,1.25594 1.046618,0 1.972471,-0.378392 0.933905,-0.378392 1.755096,-1.143228 v 1.69874 q -0.853395,0.579665 -1.811452,0.869497 -0.950007,0.289833 -2.012725,0.289833 -2.729256,0 -4.299181,-1.666537 -1.569926,-1.674587 -1.569926,-4.56486 0,-2.898325 1.569926,-4.564861 1.569925,-1.674588 4.299181,-1.674588 1.07882,0 2.028827,0.289833 0.958057,0.281781 1.79535,0.853395 z"
+         style="stroke-width:0.41220611"
+         id="path3216" />
+      <path
+         d="m 50.271484,24.954958 h 10.168288 v 1.368653 H 56.172795 V 36.974953 H 54.538462 V 26.323611 h -4.266978 z"
+         style="stroke-width:0.41220611"
+         id="path3218" />
+    </g>
+  </g>
+</svg>

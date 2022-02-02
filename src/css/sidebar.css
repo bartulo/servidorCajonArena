@@ -223,6 +223,51 @@
   right: 20px;
 }
 
+.modal {
+  display: block;
+  position:fixed;
+  z-index: 1;
+  left: 100px;
+  top: 100px;
+  width: 250px;
+  height: 600px;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgb(0,0,0,0.4);
+}
+
+.ico-content {
+  width: 60px;
+  height: 60px;
+  float: left;
+  stroke: white;
+  stroke-width: 1px;
+  background: #4d4d4d;
+  border-radius: 5px;
+  margin: 1px;
+}
+
+.stroke-white {
+  stroke: white;
+}
+
+.stroke-white text {
+  fill: white;
+}
+
+.stroke-yellow {
+  stroke: yellow;
+}
+
+.stroke-white text {
+  fill: yellow;
+}
+
+.ico-content svg {
+  width: 60px;
+  height: 60px;
+}
+
 @media screen and (max-width: 1024px) {
   .icon div {
     padding: 10px;

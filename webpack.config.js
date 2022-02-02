@@ -11,7 +11,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(png|svg|jpg|jpeg|gif|bin|webm|fs|vs)$/i,
+        test: /\.(png|jpg|jpeg|gif|bin|webm|fs|vs)$/i,
         use: [
           {
             loader: 'file-loader',
@@ -24,7 +24,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.(eot|ttf|woff)$/i,
+        test: /\.(eot|ttf|woff|svg)$/i,
         type: 'asset/resource',
       },
       {

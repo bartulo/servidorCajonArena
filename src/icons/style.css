@@ -26,7 +26,7 @@
 }
 
 .icon-home:before {
-  content: "\e900";
+  background-image: url('../simbologia/brica.svg');
 }
 .icon-users:before {
   content: "\e972";

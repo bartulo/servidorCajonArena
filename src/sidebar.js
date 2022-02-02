@@ -252,11 +252,14 @@ class IconSidebar {
     group.add( line );
     group.position.set( this.position.x, this.position.y + 10., this.position.z );
 
-    const icon = document.createElement( 'div' );
-    icon.classList.add( this.iconType );
-    icon.style.color = 'white';
-    icon.style.fontSize = '30px';
-    icon.style['-webkit-text-stroke'] = '1px black';
+    var icon = document.querySelector('.ico-content.active').querySelector('svg').cloneNode( true );
+    icon.style = 'width: 60px; height: 60px;';
+    console.log( icon );
+//    const icon = document.createElement( 'div' );
+//    icon.classList.add( this.iconType );
+//    icon.style.color = 'white';
+//    icon.style.fontSize = '30px';
+//    icon.style['-webkit-text-stroke'] = '1px black';
 
     this.label = new CSS2DObject( icon );
 
