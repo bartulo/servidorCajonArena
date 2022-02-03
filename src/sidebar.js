@@ -210,6 +210,9 @@ class IconSidebar {
     this.sidebar = sidebar;
     this.socketId = this.sidebar.socket.id;
     this.sidebar.iconId = this._id;
+    this.active = document.querySelector('.ico-content.active');
+    this.iconArray = Array.prototype.slice.call( document.querySelector('.modal-content').children );
+    this.activeIndex = this.iconArray.indexOf( this.active );
     this.viewType = window.location.pathname.split('/')[2];
     if ( data ) { /// Si es una copia a través de Broadcast
       this.iconType = `icon-${ data.type }`;
@@ -252,8 +255,9 @@ class IconSidebar {
     group.add( line );
     group.position.set( this.position.x, this.position.y + 10., this.position.z );
 
-    var icon = document.querySelector('.ico-content.active').querySelector('svg').cloneNode( true );
+    var icon = this.iconArray[this.activeIndex].querySelector('svg').cloneNode( true );
     icon.style = 'width: 60px; height: 60px;';
+    this.prueba = icon;
     console.log( icon );
 //    const icon = document.createElement( 'div' );
 //    icon.classList.add( this.iconType );

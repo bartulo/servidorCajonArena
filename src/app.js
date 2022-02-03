@@ -69,6 +69,10 @@ class App {
 		document.body.appendChild( this.labelRenderer.domElement );
 
 		window.addEventListener( 'resize', this.onWindowResize.bind( this ), false );
+    document.querySelector('.modal-content').addEventListener('click', ( e ) => {
+      document.querySelector('.ico-content.active').classList.remove('active');
+      e.target.closest('.ico-content').classList.add('active');
+    })
 
     if ( this.viewType == 'visor' ) {
       const controls = new OrbitControlsMod( this.camera, this.renderer.domElement, this.scene, this.sidebar, this.socket );
@@ -107,7 +111,9 @@ class App {
     this.render();
 
     this.socket.on( 'icon', ( data ) => {
+      console.log( data );
       const icon = new IconSidebar( data.coords, this.scene, this.sidebar, data );
+      icon.activeIndex = data.index;
       icon.createObject();
       this.render();
     });

@@ -1,3 +1,7 @@
+body {
+  padding: 30px;
+}
+
 .escenarios {
   border-collapse: collapse;
   font-size: 30px;

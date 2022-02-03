@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
   fs.readFile( __dirname + '/config.json', ( err, data ) => {
     if ( err ) throw err;
     let datos = JSON.parse( data );
-    res.render('index', { datos: datos });
+    res.render('index', { datos: datos, title: 'inicio', layout: 'index' });
   })
 });
 

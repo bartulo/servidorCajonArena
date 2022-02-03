@@ -5,9 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var livereload = require('livereload');
 var connectLiveReload = require('connect-livereload');
+var hbs = require('hbs');
 
 var indexRouter = require('./routes/index');
-var escRouter = require('./routes/proyector');
 var proyRouter = require('./routes/visor');
 
 const liveReloadServer = livereload.createServer();
@@ -24,6 +24,7 @@ app.use(connectLiveReload());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+hbs.registerPartials(__dirname + '/views/partials', function ( error ) {});
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -32,7 +33,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/proyector', escRouter);
 app.use('/app', proyRouter);
 
 // catch 404 and forward to error handler

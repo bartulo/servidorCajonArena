@@ -36,10 +36,12 @@ class OrbitControlsMod extends OrbitControls {
       icon.createObject();
       icon.createElement();
       this.dispatchEvent({ type: 'change' })
+      console.log( icon.prueba );
       this.socket.emit( 'icon', { 
         'coords': this.getIntersection( event ), 
         'type': this.sidebar.icon, 
         'socketId': icon.socketId,
+        'index': icon.activeIndex,
         _id: this.sidebar.iconId 
       } );
 
