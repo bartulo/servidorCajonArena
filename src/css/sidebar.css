@@ -1,63 +1,11 @@
-#menuIcon {
-  font-size: 50px;
-  margin-left: 10px;
-  color: white;
-  cursor: pointer;
-  position: fixed;
-}
-
-#sidenav {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 999;
-  top: 0;
-  left: 0;
-  background-color: darkslategrey;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
-  color: #cccccc;
-}
-
-#sidenav a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-  cursor: pointer;
-}
-
-#sidenav a:hover {
-  color: #f1f1f1;
-}
-
-#jsTabs {
-  margin-left: 15px;
-}
-
-.js-tabs__tab {
-  padding: 10px;
-}
-
-.closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-
-.colors {
+.new-colors {
   text-align: center;
   padding-top: 20px;
   padding-left: 5px;
   line-height: 60px;
 }
 
-.colors li {
+.new-colors li {
   list-style: none;
   width: 30px;
   height: 30px;
@@ -71,125 +19,53 @@
   position: relative;
 }
 
-.colors > li:hover{
+.new-colors > li:hover{
   -webkit-transform: scale(1.2);
   transform: scale(1.2);
   border-bottom: 10px solid rgba(0, 0, 0, .15);
   box-shadow: 0 10px 10px rgba(0, 0, 0, .2);
 }
 
-.colors > li.active-color{
+.new-colors > li.active-color{
   -webkit-transform: scale(1.2) translateY(-6px);
   transform: scale(1.2) translateY(-6px);
   box-shadow: 0 10px 10px rgba(0, 0, 0, .2);
   border-bottom: 20px solid rgba(0, 0, 0, .15);
 }
 
-.colors > li:nth-child(1){
+.new-colors > li:nth-child(1){
   background-color: gold;
 }
 
-.colors > li:nth-child(2){
+.new-colors > li:nth-child(2){
   background-color: darkviolet;
 }
 
-.colors > li:nth-child(3){
+.new-colors > li:nth-child(3){
   background-color: indianred;
 }
 
-.colors > li:nth-child(4){
+.new-colors > li:nth-child(4){
   background-color: darkorange;
 }
 
-.colors > li:nth-child(5){
+.new-colors > li:nth-child(5){
   background-color: greenyellow;
 }
 
-.colors > li:nth-child(6){
+.new-colors > li:nth-child(6){
   background-color: #ffa500;
 }
 
-.icon {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+.paint-container {
+  position: fixed;
+  top: 106px;
+  left: 10px;
+  width: 50px;
 }
 
-.icon div {
-  font-size: 70px;
-  cursor: pointer;
-  padding: 15px;
-}
-
-.icon div.active-icon {
-  --shadow: lightseagreen;
-  text-shadow: 2px 0 5px var(--shadow), -2px 0 5px var(--shadow), 0 2px 5px var(--shadow), 0 -2px 5px var(--shadow);
-}
-
-
-.icon li {
-  position: relative;
-  display: inline-block;
-  margin-right: -4px;
-  padding-bottom: 10px;
-  width: 50%;
-  float: left;
-}
-
-.icon a {
-  display: block;
-  background-color: #f7f7f7;
-  color: #a7a7a7;
-  width: 65px;
-  height: 65px;
-  position: relative;
-  text-align: center;
-  margin: 4px;
-  cursor: pointer;
-  border-radius: 50%;
-  box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;
-}
-
-.icon a.active {
-  box-shadow: 2px 2px 6px 3px #e60000 inset;
-}
-
-.icon > li:nth-child(2) a {
-  background-image: url('../images/iconos/helicoptero.png');
-  background-size: 50px 50px;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.icon > li:nth-child(3) a {
-  background-image: url('../images/iconos/observador.png');
-  background-size: 50px 50px;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.icon > li:nth-child(4) a {
-  background-image: url('../images/iconos/pma.png');
-  background-size: 50px 50px;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.icon > li:nth-child(5) a {
-  background-image: url('../images/iconos/reten.png');
-  background-size: 50px 50px;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.icon > li:nth-child(6) a {
-  background-image: url('../images/iconos/todoterreno.png');
-  background-size: 50px 50px;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-  
 .linesToDelete {
+  position: absolute;
   display: flex;
   flex-wrap: wrap;
 }
@@ -203,6 +79,7 @@
 }
 
 .iconsToDelete {
+  position: absolute;
   display: flex;
   flex-wrap: wrap;
   font-size: 36px;

@@ -12,14 +12,13 @@ class OrbitControlsMod extends OrbitControls {
     this.scene = scene;
     this.sidebar = sidebar;
     this.sidebar.controls = this;
-    this.sidebar.sidenav.addEventListener( 'openSidebar', this.openSidebar );
-    this.sidebar.sidenav.addEventListener( 'closeSidebar', this.closeSidebar );
+    document.addEventListener( 'openSidebar', this.openSidebar );
+    document.addEventListener( 'closeSidebar', this.closeSidebar );
   }
 
   openSidebar = () => {
 
     this.enabled = false;
-    console.log( 'holllla' );
     this.domElement.addEventListener('pointerdown', this.onMouseDown );
   }
 
@@ -78,6 +77,8 @@ class OrbitControlsMod extends OrbitControls {
     this.domElement.removeEventListener('pointermove', this.onMouseMove );
     this.domElement.removeEventListener('pointerup', this.onMouseUp );
 
+    document.dispatchEvent(new Event('closeSidebar'));
+    document.querySelector('.active-color').classList.remove('active-color');
     this.socket.emit( 'linea', {
       positions: this.positions,
       points: this.points,

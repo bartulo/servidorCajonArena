@@ -13,16 +13,9 @@ class Sidebar {
   }
 
   init () {
-    this.menu = document.querySelector('#menuIcon');
-    this.sidenav = document.querySelector('#sidenav');
-    this.closeButton = document.querySelector('.closebtn');
     this.state = null;
-    this.color = '#ffd700';
-    this.icon = 'binoculars';
-    this.iconClass = 'icon-binoculars';
     this.video = document.querySelector('video');
     this.seek = document.getElementById('new-seek');
-    /// NUEVO
     this.rightShelf = document.querySelector('.right-shelf');
     this.videoButton = document.querySelector('.video-button');
 
@@ -35,21 +28,9 @@ class Sidebar {
       });
     });
 
-    this.menu.addEventListener('click', this.openSidebar.bind(this));
-
-    this.closeButton.addEventListener('click', this.closeSidebar.bind(this))
-    const myTabs = new JsTabs({
-      elm: '#jsTabs',
-      onClickHandlerComplete: this.changeState.bind(this)
+    document.querySelectorAll('.new-colors li').forEach( item => {
+      item.addEventListener('click', this.newColorClicked );
     });
-    document.querySelectorAll('.colors li').forEach( item => {
-      item.addEventListener('click', this.colorClicked );
-    });
-
-    document.querySelectorAll('.icon div').forEach( item => {
-      item.addEventListener('click', this.iconClicked);
-    });
-    myTabs.init();
 
     this.seek.value = 0;
 
@@ -83,8 +64,6 @@ class Sidebar {
         console.log( 'vs' );
       }
     });
-    /// NUEVO
-    //
     document.querySelector('.pull-tab').addEventListener('click', this.toggleRightShelf.bind(this) );
 
   }
@@ -92,52 +71,22 @@ class Sidebar {
   toggleRightShelf () {
     if ( this.rightShelf.classList.contains('open') ) {
       const closeEvent = new Event('closeSidebar');
-      this.sidenav.dispatchEvent(closeEvent);
+      document.dispatchEvent(closeEvent);
       this.rightShelf.classList.remove( 'open' );
     } else {
       const openEvent = new Event('openSidebar');
-      this.sidenav.dispatchEvent(openEvent);
+      document.dispatchEvent(openEvent);
       this.rightShelf.classList.add( 'open' );
       this.state = 'icon';
     }
   }
 
-  openSidebar () {
-    const openEvent = new Event('openSidebar');
-    this.sidenav.dispatchEvent(openEvent);
-    this.state = document.querySelector('.js-tabs__tab.active').title;
-    if ( window.innerWidth > 1024 ) {
-      this.sidenav.style.width = '350px';
-    } else {
-      this.sidenav.style.width = '232px';
-    }
-  }
-
-  closeSidebar () {
-    const closeEvent = new Event('closeSidebar');
-    this.sidenav.dispatchEvent(closeEvent);
-    this.state = null;
-    this.sidenav.style.width = 0;
-  }
-
-  changeState () {
-    let state = document.querySelector('.js-tabs__tab.active');
-    this.state = state.title;
-  }
-
-  colorClicked = ( event ) => {
-    let oldColor = document.querySelector('.active-color');
-    oldColor.classList.remove('active-color');
+  newColorClicked = ( event ) => {
     event.target.classList.add('active-color');
     this.color = document.querySelector('.active-color').dataset.color;
-  }
-
-  iconClicked = ( event ) => {
-    let oldIcon = document.querySelector('.active-icon');
-    oldIcon.classList.remove('active-icon');
-    event.target.classList.add('active-icon');
-    this.icon = document.querySelector('.active-icon').dataset.image;
-    this.iconClass = document.querySelector('.active-icon').classList[0];
+    this.state = 'paint';
+    const openEvent = new Event('openSidebar');
+    document.dispatchEvent(openEvent);
   }
 
 }
