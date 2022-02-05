@@ -21,9 +21,10 @@ class Sidebar {
     this.icon = 'binoculars';
     this.iconClass = 'icon-binoculars';
     this.video = document.querySelector('video');
-    this.play = document.getElementById('play');
-    this.pause = document.getElementById('pause');
-    this.seek = document.getElementById('seek');
+    this.seek = document.getElementById('new-seek');
+    /// NUEVO
+    this.rightShelf = document.querySelector('.right-shelf');
+    this.videoButton = document.querySelector('.video-button');
 
     this.video.addEventListener('loadedmetadata', () => { 
       this.seek.setAttribute( 'max', this.video.duration )
@@ -52,20 +53,22 @@ class Sidebar {
 
     this.seek.value = 0;
 
-    this.play.addEventListener('click', () => {
-      this.video.play();
-      this.videoStatus = true;
-      this.socket.emit('playVideo');
-      this.app.render();
+    this.videoButton.addEventListener('click', () => {
+      if ( this.videoButton.classList.contains('active') ) {
+        this.video.pause();
+        this.videoStatus = false;
+        this.socket.emit('pauseVideo');
+        this.app.render();
+        this.videoButton.classList.remove('active');
+      } else {
+        this.video.play();
+        this.videoStatus = true;
+        this.socket.emit('playVideo');
+        this.app.render();
+        this.videoButton.classList.add('active');
+      }
     });
-
-    this.pause.addEventListener('click', () => {
-      this.video.pause();
-      this.videoStatus = false;
-      this.socket.emit('pauseVideo');
-      this.app.render();
-    });
-
+    
     this.video.addEventListener('timeupdate', () => {
       this.seek.value = Math.floor(this.video.currentTime);
     });
@@ -80,7 +83,23 @@ class Sidebar {
         console.log( 'vs' );
       }
     });
+    /// NUEVO
+    //
+    document.querySelector('.pull-tab').addEventListener('click', this.toggleRightShelf.bind(this) );
 
+  }
+
+  toggleRightShelf () {
+    if ( this.rightShelf.classList.contains('open') ) {
+      const closeEvent = new Event('closeSidebar');
+      this.sidenav.dispatchEvent(closeEvent);
+      this.rightShelf.classList.remove( 'open' );
+    } else {
+      const openEvent = new Event('openSidebar');
+      this.sidenav.dispatchEvent(openEvent);
+      this.rightShelf.classList.add( 'open' );
+      this.state = 'icon';
+    }
   }
 
   openSidebar () {
@@ -236,7 +255,7 @@ class IconSidebar {
 
     const lineMaterial = new LineBasicMaterial( {
       color: '#fff',
-      linewidth: 4
+      linewidth: 1
     } );
 
     const geometry = new BufferGeometry();

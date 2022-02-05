@@ -32,8 +32,26 @@
     }
 
   </script>
+
   {{#if renderSidebar}}
     {{>sidebar}}
+    <div class="video-container">
+      <div class="video-button"></div>
+      <input class="new-seek" id="new-seek" value="0" min="0" type="range" step="1">
+    </div>
   {{/if}}
-  {{>iconos}}
-		<script src="/visor/bundle.js"></script>
+
+  <aside class="right-shelf">
+    <section>
+      {{>iconos}}
+    </section>
+    {{#if renderSidebar}}
+      <div class="pull-tab">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+      </div>
+    {{/if}}
+  </aside>
+
+  <script src="/visor/bundle.js"></script>

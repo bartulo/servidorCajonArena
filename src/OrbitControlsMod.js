@@ -19,6 +19,7 @@ class OrbitControlsMod extends OrbitControls {
   openSidebar = () => {
 
     this.enabled = false;
+    console.log( 'holllla' );
     this.domElement.addEventListener('pointerdown', this.onMouseDown );
   }
 
