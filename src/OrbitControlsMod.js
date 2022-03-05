@@ -36,7 +36,7 @@ class OrbitControlsMod extends OrbitControls {
       icon.createObject();
       icon.createElement();
       this.dispatchEvent({ type: 'change' })
-      console.log( icon.prueba );
+      this.domElement.addEventListener('pointerup', this.onMouseUp );
       this.socket.emit( 'icon', { 
         'coords': this.getIntersection( event ), 
         'type': this.sidebar.icon, 
@@ -71,22 +71,25 @@ class OrbitControlsMod extends OrbitControls {
   }
 
   onMouseUp = ( ) => {
+    if ( this.sidebar.state == 'icon' ) { 
+      document.dispatchEvent( new Event('closeSidebar'));
+      this.sidebar.rightShelf.classList.remove('open');
 
+    } else if ( this.sidebar.state == 'paint' ) { 
+      this.lineSidebar.createElement();
+      this.domElement.removeEventListener('pointermove', this.onMouseMove );
+      this.domElement.removeEventListener('pointerup', this.onMouseUp );
 
-    this.lineSidebar.createElement();
-    this.domElement.removeEventListener('pointermove', this.onMouseMove );
-    this.domElement.removeEventListener('pointerup', this.onMouseUp );
-
-    document.dispatchEvent(new Event('closeSidebar'));
-    document.querySelector('.active-color').classList.remove('active-color');
-    this.socket.emit( 'linea', {
-      positions: this.positions,
-      points: this.points,
-      color: this.lineSidebar.color,
-      socketId: this.socket.id,
-      id: this.sidebar.lineId
-    });
-    
+      document.dispatchEvent(new Event('closeSidebar'));
+      document.querySelector('.active-color').classList.remove('active-color');
+      this.socket.emit( 'linea', {
+        positions: this.positions,
+        points: this.points,
+        color: this.lineSidebar.color,
+        socketId: this.socket.id,
+        id: this.sidebar.lineId
+      });
+    } 
   }
 
   getIntersection = ( event ) => {

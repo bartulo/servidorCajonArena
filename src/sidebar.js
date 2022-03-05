@@ -1,5 +1,3 @@
-import JsTabs from 'js-tabs';
-import 'js-tabs/src/_js-tabs-base.scss';
 import { BufferGeometry, LineBasicMaterial, Line, Group, BufferAttribute, Mesh } from 'three';
 import {CSS2DObject} from 'three/examples/jsm/renderers/CSS2DRenderer';
 import { MeshLine } from './meshline/meshline';
@@ -244,7 +242,7 @@ class IconSidebar {
   createElement () {
 
     this.elem = document.createElement( 'div' );
-    this.elem.classList.add( this.sidebar.iconClass );
+    this.elem.appendChild(this.active.children[0].cloneNode(true));
     const container = document.querySelector( '.iconsToDelete' );
     container.appendChild( this.elem );
 

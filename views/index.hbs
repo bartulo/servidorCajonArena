@@ -1,80 +1,18 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="/stylesheets/inicio.css" />
-  </head>
-    <script src="/socket.io/socket.io.js"></script>
-      <script>
-        const socket = io();
+<div class="lista">
+  <table class="escenarios">
+    <tr>
+      <th>Escenario</th>
+      <th>Estado</th>
+    </tr>
+    
+      {{#each datos}}
+    <tr class="linea">
+      <td>{{this.name}}</td>
+      <td id={{this.name}}>
+      </td>
+    </tr>
+      {{/each}}
+  </table>
+</div>
 
-        const escenarioActivo = function( escena, pid ) {
-          let escenario = document.querySelector(`#${escena}`);
-          let lineas = document.querySelectorAll('.linea');
-          console.log( pid );
-          lineas.forEach( ( e ) => {
-            e.children[1].innerHTML = '';
-          });
-          let stop = document.createElement('button');
-          stop.innerHTML = 'Parar';
-          escenario.appendChild( stop );
-          stop.addEventListener( 'click', () => {
-            socket.emit( 'stop', pid );
-          });
-        };
-
-        const rellenarTD = function() {
-          let lineas = document.querySelectorAll('.linea');
-          lineas.forEach( ( e ) => {
-            e.children[1].innerHTML = '';
-            const escenario = e.children[0].innerHTML;
-            let enlace = document.createElement( 'a' );
-            enlace.href = `app/visor/${escenario}`;
-            enlace.title = escenario;
-            enlace.target = '_blank';
-            enlace.innerHTML = 'Iniciar';
-            e.children[1].appendChild( enlace );
-            enlace.addEventListener( 'click', () => {
-              socket.emit( 'openBrowser', escenario );
-            });
-          });
-        };
-
-        socket.on( 'onload', ( p ) => {
-          if ( p.proyector ) {
-            escenarioActivo( p.escenario, p.pid );
-          } else {
-            rellenarTD();
-          }
-        });
-
-        socket.on( 'out', (  ) => {
-          rellenarTD();
-        });
-
-        socket.on( 'opened', ( elem ) => {
-          socket.emit('sendPID', elem.pid);
-          escenarioActivo( elem.escenario, elem.pid );
-        });
-  </script>
-  <body>
-
-  <div class="lista">
-    <table class="escenarios">
-      <tr>
-        <th>Escenario</th>
-        <th>Estado</th>
-      </tr>
-      
-        {{#each datos}}
-      <tr class="linea">
-        <td>{{this.name}}</td>
-        <td id={{this.name}}>
-        </td>
-      </tr>
-        {{/each}}
-    </table>
-  </div>
-
-  </body>
-
-</html>
+<script src="/javascripts/main.bundle.js"></script>

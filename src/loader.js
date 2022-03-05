@@ -1,6 +1,5 @@
 import {
   TextureLoader, 
-  FileLoader,
   PlaneGeometry
 } from 'three';
 
@@ -23,7 +22,7 @@ class AssetsLoader {
     let promises = []
 
     promises.push( new Promise( resolve => {
-      loader.load( `/visor/static/pnoa_${ this.loc }.png`, ( t ) => {
+      loader.load( `/images/pnoa_${ this.loc }.png`, ( t ) => {
         this.app.texture = t;
 
         resolve( );
@@ -31,7 +30,7 @@ class AssetsLoader {
     }));
 
     promises.push( new Promise( resolve => {
-      loader.load( `/visor/static/topo_${ this.loc }.png`, ( t ) => {
+      loader.load( `/images/topo_${ this.loc }.png`, ( t ) => {
         this.app.texture2 = t;
 
         resolve( );
@@ -43,7 +42,7 @@ class AssetsLoader {
     if ( this.viewType == 'visor' ) {
 
       promises.push( new Promise( resolve => {
-        terrainLoader.load( `/visor/static/mdt_${ this.loc }.bin`, ( data )=> {
+        terrainLoader.load( `/images/mdt_${ this.loc }.bin`, ( data )=> {
           this.app.geometry = new PlaneGeometry( 680, 384, this.config.meshWidth - 1, this.config.meshHeight - 1);
 
           for ( let i = 0; i < this.config.meshWidth * this.config.meshHeight; i++ ) {

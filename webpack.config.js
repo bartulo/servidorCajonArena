@@ -1,10 +1,14 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    app: './src/index.js',
+    formulario: './src/formulario.js',
+    main: './src/main.js',
+  },
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'public/visor'),
+    filename: 'javascripts/[name].bundle.js',
+    path: path.resolve(__dirname, 'public'),
   },
   watch: true,
 
@@ -17,7 +21,7 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[name].[ext]',
-              outputPath: 'static',
+              outputPath: 'images',
               useRelativePath: true
             }
           }
@@ -41,6 +45,10 @@ module.exports = {
           'css-loader',
           'sass-loader',
         ]
+      },
+      {
+        test: /\.glsl$/,
+        loader: 'webpack-glsl-loader'
       },
     ],
   },

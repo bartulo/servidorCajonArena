@@ -21,6 +21,13 @@
   },
 
   {
+    "name": "canada",
+    "meshWidth": 400, 
+    "meshHeight": 225,
+    "widthKm": 5
+  },
+
+  {
     "name": "tortuero2",
     "meshWidth": 400, 
     "meshHeight": 225,

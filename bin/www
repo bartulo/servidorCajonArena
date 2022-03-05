@@ -117,7 +117,6 @@ io.on( 'connection', ( socket ) => {
     socket.data.tipo = elem.tipo;
     socket.data.escenario = elem.escenario;
     socket.data.pid = pidG;
-    console.log('data: ', socket.data);
   });
   socket.on('tecla', ( tecla ) => {
     socket.broadcast.emit( 'tecla', tecla );
@@ -151,9 +150,13 @@ io.on( 'connection', ( socket ) => {
   });
   socket.on('stop', (pid) => {
     var exec = require('child_process').exec;
-    var child = exec('xdotool search "Mozilla Firefox" windowactivate --sync key --clearmodifiers ctrl+w');
+    var child = exec('xdotool search "Mozilla Firefox" windowactivate --sync key --clearmodifiers ctrl+q');
     //process.kill(-pid);
   });
+  socket.on('solicitud', (texto) => {
+    socket.broadcast.emit('solicitud');
+  });
+
   socket.on('disconnect', () => {
     if ( socket.data.tipo === 'proyector' ) {
       socket.broadcast.emit( 'out' );

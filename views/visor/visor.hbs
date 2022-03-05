@@ -1,68 +1,33 @@
-  <script id="vertex_shader" type="x-shader/x-vertex">
+{{#if renderSidebar}}
+<button class="textureButton">Topo</button>
+  <div class="paint-container">
+    <ul class="new-colors">
+      <li data-color="#ffd700"></li>
+      <li data-color="#9400d3"></li>
+      <li data-color="#cd5c5c"></li>
+      <li data-color="#ff8c00"></li>
+      <li data-color="#adff2f"></li>
+    </ul>
+  </div>
+  <div class="video-container">
+    <div class="video-button"></div>
+    <input class="new-seek" id="new-seek" value="0" min="0" type="range" step="1">
+  </div>
+  <div class="iconsToDelete"></div>
+  <div class="linesToDelete"></div>
+{{/if}}
 
-    varying vec2 vUv;
-
-    void main() {
-
-      vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-
-      vUv = uv;
-
-      gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-
-    }
-
-  </script>
-  <script id="fragment_shader" type="x-shader/x-fragment">
-
-    uniform sampler2D texture;
-    uniform sampler2D texture2;
-
-    varying vec2 vUv;
-    varying vec3 vNormal;
-    varying vec3 vViewPosition;
-
-    void main() {
-
-      vec4 tColor = texture2D( texture, vUv );
-      vec4 tColor2 = texture2D( texture2, vUv );
-
-      gl_FragColor = vec4( mix( tColor.rgb, tColor2.rgb, tColor2.a ), 1.0 );
-
-    }
-
-  </script>
-
+<aside class="right-shelf">
+  <section>
+    {{>iconos}}
+  </section>
   {{#if renderSidebar}}
-  <button class="textureButton">Topo</button>
-    <div class="paint-container">
-      <ul class="new-colors">
-        <li data-color="#ffd700"></li>
-        <li data-color="#9400d3"></li>
-        <li data-color="#cd5c5c"></li>
-        <li data-color="#ff8c00"></li>
-        <li data-color="#adff2f"></li>
-      </ul>
+    <div class="pull-tab">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
     </div>
-    <div class="video-container">
-      <div class="video-button"></div>
-      <input class="new-seek" id="new-seek" value="0" min="0" type="range" step="1">
-    </div>
-    <div class="iconsToDelete"></div>
-    <div class="linesToDelete"></div>
   {{/if}}
+</aside>
 
-  <aside class="right-shelf">
-    <section>
-      {{>iconos}}
-    </section>
-    {{#if renderSidebar}}
-      <div class="pull-tab">
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-      </div>
-    {{/if}}
-  </aside>
-
-  <script src="/visor/bundle.js"></script>
+<script src="/javascripts/app.bundle.js"></script>

@@ -2,7 +2,6 @@ import {
 	Mesh,
 	PerspectiveCamera,
 	Scene,
-	WebGLRenderer,
   VideoTexture,
   ShaderMaterial,
   WebGL1Renderer,
@@ -21,8 +20,7 @@ import { Sidebar, IconSidebar, LineSidebar } from './sidebar.js';
 require.context('./images', true, /\.(png|bin|webm)$/)
 import Config from './config/config.json';
 import './css/sidebar.css';
-import './icons/style.css';
-
+import './css/main.css';
 
 class App {
 
@@ -35,12 +33,14 @@ class App {
     this.socket.emit( 'data', { tipo: this.viewType, escenario: this.escenario } ); 
     this.video = document.createElement('video');
     this.video.style['display'] = 'none';
-    this.video.src = `/visor/static/video_${ this.escenario }.webm`;
+    this.video.src = `/images/video_${ this.escenario }.webm`;
     this.video.muted = true;
     const body = document.body;
     body.appendChild( this.video );
     this.sidebar = new Sidebar( this.socket );
     this.sidebar.app = this;
+    this.terrainVS = require('./shaders/terrainVS.glsl');
+    this.terrainFS = require('./shaders/terrainFS.glsl');
 
     if ( this.viewType == 'visor' ) {
 
@@ -95,8 +95,8 @@ class App {
     }
     this.material = new ShaderMaterial({
       uniforms: uniforms,
-      vertexShader: document.getElementById( 'vertex_shader' ).textContent,
-      fragmentShader: document.getElementById( 'fragment_shader' ).textContent
+      vertexShader: this.terrainVS,
+      fragmentShader: this.terrainFS,
     });
 
     if ( this.viewType == 'visor' ) {
@@ -111,7 +111,6 @@ class App {
     this.render();
 
     this.socket.on( 'icon', ( data ) => {
-      console.log( data );
       const icon = new IconSidebar( data.coords, this.scene, this.sidebar, data );
       icon.activeIndex = data.index;
       icon.createObject();
@@ -129,8 +128,6 @@ class App {
     this.socket.on( 'remove', ( id ) => {
       console.log( 'eo' );
       const elem = this.scene.getObjectByName( `${ id.type }_${ id.socketId }_${ id.id }` );
-      console.log( id.socketId );
-      console.log( this.scene.children );
       if ( id.type == 'icon' ) {
         elem.children[1].element.remove();
       }
