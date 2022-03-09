@@ -157,6 +157,10 @@ io.on( 'connection', ( socket ) => {
     socket.broadcast.emit('solicitud');
   });
 
+  socket.on('solicitudAceptada', (escenario) => {
+    socket.broadcast.emit('solicitudAceptada', escenario);
+  });
+
   socket.on('disconnect', () => {
     if ( socket.data.tipo === 'proyector' ) {
       socket.broadcast.emit( 'out' );

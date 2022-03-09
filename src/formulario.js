@@ -7,6 +7,7 @@ solicitud.addEventListener('click', () => {
   socket.emit('solicitud', 'hola')
 });
 
-socket.on('aceptada', () => {
-  document.querySelect('form').submit();
+socket.on('solicitudAceptada', ( escenario ) => {
+  document.querySelector('form').action = escenario;
+  document.querySelector('form').submit();
 });

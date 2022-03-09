@@ -1,5 +1,7 @@
 import { io } from 'socket.io-client';
 import './css/inicio.css';
+import { Modal } from 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const socket = io();
 
@@ -9,10 +11,17 @@ class Tabla {
 
     this.estado = false;
     this.escenario = '';
+    this.solicitudModal = new Modal(document.getElementById('solicitud'));
+    this.join = document.getElementById('join');
 
   }
 
   init() {
+
+    this.join.addEventListener('click', () => {
+      socket.emit( 'solicitudAceptada', this.escenario );
+      this.solicitudModal.hide();
+    })
 
     socket.on( 'onload', ( p ) => {
       if ( p.proyector ) {
@@ -28,7 +37,7 @@ class Tabla {
 
     socket.on( 'solicitud', () => {
       if ( this.estado ) {
-        alert('solicitando');
+        this.solicitudModal.show();
         console.log( this.escenario );
       }
     });
