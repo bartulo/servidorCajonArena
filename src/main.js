@@ -11,6 +11,9 @@ class Tabla {
 
     this.estado = false;
     this.escenario = '';
+    this.listado = document.getElementById('listado');
+    this.panel = document.getElementById('panel');
+    this.stop = document.getElementById('stop');
     this.solicitudModal = new Modal(document.getElementById('solicitud'));
     this.join = document.getElementById('join');
 
@@ -38,7 +41,6 @@ class Tabla {
     socket.on( 'solicitud', () => {
       if ( this.estado ) {
         this.solicitudModal.show();
-        console.log( this.escenario );
       }
     });
 
@@ -51,20 +53,12 @@ class Tabla {
   escenarioActivo = ( escena, pid ) => {
 
     this.escenario = escena;
-    let escenarioElem = document.querySelector(`#${this.escenario}`);
-    let lineas = document.querySelectorAll('.linea');
+    this.pid = pid
 
-    lineas.forEach( ( e ) => {
-      e.children[1].innerHTML = '';
-    });
+    this.stop.addEventListener( 'click', this.stopEscenario );
 
-    let stop = document.createElement('button');
-    stop.innerHTML = 'Parar';
-    escenarioElem.appendChild( stop );
-
-    stop.addEventListener( 'click', () => {
-      socket.emit( 'stop', pid );
-    });
+    this.listado.style.display = 'none';
+    this.panel.style.display = 'block';
 
     this.estado = true;
 
@@ -74,6 +68,7 @@ class Tabla {
 
     this.estado = false;
     this.escenario = '';
+    this.stop.removeEventListener( 'click', this.stopEscenario );
 
     let lineas = document.querySelectorAll('.linea');
 
@@ -81,9 +76,8 @@ class Tabla {
       e.children[1].innerHTML = '';
       const escenario = e.children[0].innerHTML;
       let enlace = document.createElement( 'a' );
-      enlace.href = `app/visor/${escenario}`;
+      enlace.href = "#";
       enlace.title = escenario;
-      enlace.target = '_blank';
       enlace.innerHTML = 'Iniciar';
       e.children[1].appendChild( enlace );
       enlace.addEventListener( 'click', () => {
@@ -92,6 +86,13 @@ class Tabla {
 
     });
 
+    this.listado.style.display = 'block';
+    this.panel.style.display = 'none';
+
+  }
+
+  stopEscenario = () => {
+    socket.emit( 'stop', this.pid ); 
   }
 
 }
