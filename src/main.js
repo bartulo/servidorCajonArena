@@ -14,6 +14,7 @@ class Tabla {
     this.listado = document.getElementById('listado');
     this.panel = document.getElementById('panel');
     this.stop = document.getElementById('stop');
+    this.titulo = document.getElementById('titulo');
     this.solicitudModal = new Modal(document.getElementById('solicitud'));
     this.join = document.getElementById('join');
 
@@ -56,6 +57,8 @@ class Tabla {
     this.pid = pid
 
     this.stop.addEventListener( 'click', this.stopEscenario );
+
+    this.titulo.innerHTML = escena;
 
     this.listado.style.display = 'none';
     this.panel.style.display = 'block';
