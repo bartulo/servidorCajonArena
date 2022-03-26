@@ -117,18 +117,34 @@ io.on( 'connection', ( socket ) => {
     socket.data.tipo = elem.tipo;
     socket.data.escenario = elem.escenario;
     socket.data.pid = pidG;
+    socket.data.room = elem.room;
+    if ( elem.room != 'master' ) {
+      socket.join( elem.room );
+    }
   });
   socket.on('tecla', ( tecla ) => {
     socket.broadcast.emit( 'tecla', tecla );
   });
   socket.on('linea', ( positions ) => {
-    socket.broadcast.emit( 'linea', positions );
+    if ( socket.data.room == 'master' ) {
+      socket.broadcast.emit( 'linea', positions );
+    } else {
+      socket.to( socket.data.room ).emit( 'linea', positions );
+    }
   });
   socket.on('icon', ( coords ) => {
-    socket.broadcast.emit( 'icon', coords );
+    if ( socket.data.room == 'master' ) {
+      socket.broadcast.emit( 'icon', coords );
+    } else {
+      socket.to( socket.data.room ).emit( 'icon', coords );
+    }
   });
   socket.on('remove', ( id ) => {
-    socket.broadcast.emit( 'remove', id );
+    if ( socket.data.room == 'master' ) {
+      socket.broadcast.emit( 'remove', id );
+    } else {
+      socket.to( socket.data.room ).emit( 'remove', id );
+    }
   });
   socket.on('playVideo', ( ) => {
     socket.broadcast.emit( 'playVideo' );

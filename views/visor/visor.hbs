@@ -1,5 +1,4 @@
 {{#if renderSidebar}}
-<button class="textureButton">Topo</button>
   <div class="paint-container">
     <ul class="new-colors">
       <li data-color="#ffd700"></li>
@@ -9,10 +8,13 @@
       <li data-color="#adff2f"></li>
     </ul>
   </div>
-  <div class="video-container">
-    <div class="video-button"></div>
-    <input class="new-seek" id="new-seek" value="0" min="0" type="range" step="1">
-  </div>
+  {{#if room}}
+    <button class="textureButton">Topo</button>
+    <div class="video-container">
+      <div class="video-button"></div>
+      <input class="new-seek" id="new-seek" value="0" min="0" type="range" step="1">
+    </div>
+  {{/if}}
   <div class="iconsToDelete"></div>
   <div class="linesToDelete"></div>
 {{/if}}

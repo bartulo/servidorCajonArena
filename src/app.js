@@ -26,11 +26,12 @@ class App {
 
 	init() {
 
-    this.escenario = window.location.pathname.split('/')[3];
     this.viewType = window.location.pathname.split('/')[2];
+    this.escenario = window.location.pathname.split('/')[3];
+    this.room = window.location.pathname.split('/')[4];
     this.config = Config.filter( obj => obj.name === this.escenario )[0];
     this.socket = io( );
-    this.socket.emit( 'data', { tipo: this.viewType, escenario: this.escenario } ); 
+    this.socket.emit( 'data', { tipo: this.viewType, escenario: this.escenario, room: this.room } ); 
     this.video = document.createElement('video');
     this.video.style['display'] = 'none';
     this.video.src = `/images/video_${ this.escenario }.webm`;
@@ -67,6 +68,11 @@ class App {
     this.labelRenderer.domElement.style.top = '0px';
     this.labelRenderer.domElement.style.pointerEvents = 'none';
 		document.body.appendChild( this.labelRenderer.domElement );
+    this.video.addEventListener('seeked', () => {
+      setTimeout(() => {
+        this.render();
+      }, 100);
+    });
 
 		window.addEventListener( 'resize', this.onWindowResize.bind( this ), false );
     document.querySelector('.modal-content').addEventListener('click', ( e ) => {
@@ -99,7 +105,7 @@ class App {
       fragmentShader: this.terrainFS,
     });
 
-    if ( this.viewType == 'visor' ) {
+    if ( this.viewType == 'visor' & this.room == 'master' ) {
       this.textureButton = document.querySelector('.textureButton')
 
       this.textureButton.addEventListener('click', this.changeTexture.bind( this ) );
@@ -126,7 +132,6 @@ class App {
     });
 
     this.socket.on( 'remove', ( id ) => {
-      console.log( 'eo' );
       const elem = this.scene.getObjectByName( `${ id.type }_${ id.socketId }_${ id.id }` );
       if ( id.type == 'icon' ) {
         elem.children[1].element.remove();
@@ -146,13 +151,11 @@ class App {
 
     this.socket.on( 'playVideo', () => {
       this.video.play();
-      this.sidebar.videoStatus = true;
       this.render();
     });
 
     this.socket.on( 'pauseVideo', () => {
       this.video.pause();
-      this.sidebar.videoStatus = false;
       this.render();
     });
 
@@ -162,7 +165,6 @@ class App {
     });
 
     this.video.addEventListener('ended', () => {
-      this.sidebar.videoStatus = false;
     })
 
 	}
@@ -181,7 +183,7 @@ class App {
 
   render() {
 
-    if ( this.sidebar.videoStatus ) {
+    if ( this.video.paused == false ) {
       requestAnimationFrame( this.render.bind( this ) );
     }
     this.renderer.render( this.scene, this.camera );

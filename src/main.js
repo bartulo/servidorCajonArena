@@ -15,14 +15,16 @@ class Tabla {
     this.panel = document.getElementById('panel');
     this.stop = document.getElementById('stop');
     this.titulo = document.getElementById('titulo');
+    this.visor = document.getElementById('visor');
+    this.form = document.querySelector('form');
     this.solicitudModal = new Modal(document.getElementById('solicitud'));
-    this.join = document.getElementById('join');
+    this.room1 = document.getElementById('room1');
 
   }
 
   init() {
 
-    this.join.addEventListener('click', () => {
+    this.room1.addEventListener('click', () => {
       socket.emit( 'solicitudAceptada', this.escenario );
       this.solicitudModal.hide();
     })
@@ -49,6 +51,10 @@ class Tabla {
       this.escenarioActivo( elem.escenario, elem.pid );
     });
 
+    socket.on( 'linea', ( linea ) => {
+      console.log( linea ); 
+    });
+
   }
 
   escenarioActivo = ( escena, pid ) => {
@@ -57,6 +63,7 @@ class Tabla {
     this.pid = pid
 
     this.stop.addEventListener( 'click', this.stopEscenario );
+    this.visor.addEventListener( 'click', this.abrirVisor );
 
     this.titulo.innerHTML = escena;
 
@@ -72,6 +79,7 @@ class Tabla {
     this.estado = false;
     this.escenario = '';
     this.stop.removeEventListener( 'click', this.stopEscenario );
+    this.visor.removeEventListener( 'click', this.abrirVisor );
 
     let lineas = document.querySelectorAll('.linea');
 
@@ -95,7 +103,17 @@ class Tabla {
   }
 
   stopEscenario = () => {
+
     socket.emit( 'stop', this.pid ); 
+
+  }
+
+  abrirVisor = () => {
+
+    this.form.action = `app/visor/${ this.escenario }/master`;
+    this.form.target = '_blanket';
+    this.form.submit();
+
   }
 
 }

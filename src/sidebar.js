@@ -7,62 +7,63 @@ import { MeshLineMaterial } from './meshline/material';
 class Sidebar {
   constructor ( socket ) {
     this.socket = socket;
+    this.room = window.location.pathname.split('/')[4];
 
   }
 
   init () {
     this.state = null;
     this.video = document.querySelector('video');
-    this.seek = document.getElementById('new-seek');
     this.rightShelf = document.querySelector('.right-shelf');
-    this.videoButton = document.querySelector('.video-button');
 
-    this.video.addEventListener('loadedmetadata', () => { 
-      this.seek.setAttribute( 'max', this.video.duration )
-
-      this.seek.addEventListener('mousemove', ( event ) => {
-        const skipTo = Math.round( ( event.offsetX / event.target.clientWidth ) * this.video.duration );
-        this.seek.setAttribute('data-seek', skipTo);
-      });
-    });
+    document.querySelector('.pull-tab').addEventListener('click', this.toggleRightShelf.bind(this) );
 
     document.querySelectorAll('.new-colors li').forEach( item => {
       item.addEventListener('click', this.newColorClicked );
     });
 
-    this.seek.value = 0;
+    if ( this.room == 'master' ) {
+      this.seek = document.getElementById('new-seek');
+      this.videoButton = document.querySelector('.video-button');
 
-    this.videoButton.addEventListener('click', () => {
-      if ( this.videoButton.classList.contains('active') ) {
-        this.video.pause();
-        this.videoStatus = false;
-        this.socket.emit('pauseVideo');
-        this.app.render();
-        this.videoButton.classList.remove('active');
-      } else {
-        this.video.play();
-        this.videoStatus = true;
-        this.socket.emit('playVideo');
-        this.app.render();
-        this.videoButton.classList.add('active');
-      }
-    });
-    
-    this.video.addEventListener('timeupdate', () => {
-      this.seek.value = Math.floor(this.video.currentTime);
-    });
+      this.video.addEventListener('loadedmetadata', () => { 
+        this.seek.setAttribute( 'max', this.video.duration )
 
-    this.seek.addEventListener('input', ( event ) => {
-      const skipTo = event.target.dataset.seek ? event.target.dataset.seek : event.target.value;
-      this.video.currentTime = skipTo;
-      this.seek.value = skipTo;
-      this.socket.emit('skipTo', skipTo);
-      if ( !this.videoStatus ) {
-        this.app.render();
-        console.log( 'vs' );
-      }
-    });
-    document.querySelector('.pull-tab').addEventListener('click', this.toggleRightShelf.bind(this) );
+        this.seek.addEventListener('mousemove', ( event ) => {
+          const skipTo = Math.round( ( event.offsetX / event.target.clientWidth ) * this.video.duration );
+          this.seek.setAttribute('data-seek', skipTo);
+        });
+      });
+
+      this.seek.value = 0;
+
+      this.videoButton.addEventListener('click', () => {
+        if ( this.videoButton.classList.contains('active') ) {
+          this.video.pause();
+          this.videoStatus = false;
+          this.socket.emit('pauseVideo');
+          this.app.render();
+          this.videoButton.classList.remove('active');
+        } else {
+          this.video.play();
+          this.videoStatus = true;
+          this.socket.emit('playVideo');
+          this.app.render();
+          this.videoButton.classList.add('active');
+        }
+      });
+      
+      this.video.addEventListener('timeupdate', () => {
+        this.seek.value = Math.floor(this.video.currentTime);
+      });
+
+      this.seek.addEventListener('input', ( event ) => {
+        const skipTo = event.target.dataset.seek ? event.target.dataset.seek : event.target.value;
+        this.video.currentTime = skipTo;
+        this.seek.value = skipTo;
+        this.socket.emit('skipTo', skipTo);
+      });
+    }
 
   }
 
@@ -96,14 +97,12 @@ class LineSidebar {
     this.sidebar = sidebar;
     this.sidebar.lineId = this._id;
     this.socketId = this.sidebar.socket.id;
-    console.log( this.socketId );
     if ( data ) { /// Si es una copia a través de Broadcast
       this.color = data.color;
       this.nameId = `line_${ data.socketId }_${ data.id }`;
     } else { // Si es original
       this.color = this.sidebar.color;
       this.nameId = `line_${ this.socketId }_${ this._id }`;
-      console.log( this.nameId );
     }
 
   }
@@ -224,7 +223,6 @@ class IconSidebar {
     var icon = this.iconArray[this.activeIndex].querySelector('svg').cloneNode( true );
     icon.style = 'width: 60px; height: 60px;';
     this.prueba = icon;
-    console.log( icon );
 //    const icon = document.createElement( 'div' );
 //    icon.classList.add( this.iconType );
 //    icon.style.color = 'white';

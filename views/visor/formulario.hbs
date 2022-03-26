@@ -1,8 +1,18 @@
-<form method="post">
-  <label for="team_name">Nombre de equipo: </label>
-  <input id="nombre_equipo" type="text" name="equipo" value="equipo 1.">
-</form>
+<div class="container">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-8">
+      <form method="post">
+        <div class="form-group">
+          <label for="team_name">Nombre de equipo: </label>
+          <input id="nombre_equipo" type="text" class="form-control" name="equipo" placeholder="Introduce nombre equipo">
+        </div>
+      </form>
+      <button id="solicitud" type="button" class="btn btn-primary">Solicitud</button>
+    </div>
+    <div class="col"></div>
+  </div>
+</div>
 
-<button id="solicitud">Prueba</button>
 
 <script src="/javascripts/formulario.bundle.js"></script>
