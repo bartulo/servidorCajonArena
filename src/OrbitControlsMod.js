@@ -12,6 +12,8 @@ class OrbitControlsMod extends OrbitControls {
     this.scene = scene;
     this.sidebar = sidebar;
     this.sidebar.controls = this;
+    this.room = window.location.pathname.split('/')[4];
+    this.group = this.scene.getObjectByName( this.room );
     document.addEventListener( 'openSidebar', this.openSidebar );
     document.addEventListener( 'closeSidebar', this.closeSidebar );
   }
@@ -42,6 +44,7 @@ class OrbitControlsMod extends OrbitControls {
         'type': this.sidebar.icon, 
         'socketId': icon.socketId,
         'index': icon.activeIndex,
+        'room': this.room,
         _id: this.sidebar.iconId 
       } );
 
@@ -54,7 +57,7 @@ class OrbitControlsMod extends OrbitControls {
       this.lineSidebar = new LineSidebar( this.scene, this.sidebar );
 
       this.lineSidebar.createObject();
-      this.scene.add( this.lineSidebar.line );
+      this.group.add( this.lineSidebar.line );
       this.domElement.addEventListener('pointermove', this.onMouseMove );
       this.domElement.addEventListener('pointerup', this.onMouseUp );
     }
@@ -87,7 +90,8 @@ class OrbitControlsMod extends OrbitControls {
         points: this.points,
         color: this.lineSidebar.color,
         socketId: this.socket.id,
-        id: this.sidebar.lineId
+        id: this.sidebar.lineId,
+        room: this.room
       });
     } 
   }
@@ -111,7 +115,7 @@ class OrbitControlsMod extends OrbitControls {
 
     ray.setFromCamera( mouseDownPoint, this.camera );
 
-    const intersects = ray.intersectObject( this.scene.children[0] );
+    const intersects = ray.intersectObject( this.scene.getObjectByName( 'terrain' ) );
 
     return intersects[0].point;
 

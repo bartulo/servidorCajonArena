@@ -7,7 +7,9 @@ import {
   WebGL1Renderer,
   RGBAFormat,
   Color,
-  OrthographicCamera
+  OrthographicCamera,
+  Group,
+  Object3D
 } from 'three';
 
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
@@ -55,6 +57,27 @@ class App {
     this.camera.position.set( 0, 700, 0 );
 
 		this.scene = new Scene();
+
+    this.groupMaster = new Group();
+    this.groupMaster.name = 'master';
+    this.scene.add( this.groupMaster );
+    this.groupRoom1 = new Group();
+    this.groupRoom1.name = 'room1';
+    this.scene.add( this.groupMaster );
+    this.groupRoom2 = new Group();
+    this.groupRoom2.name = 'room2';
+    this.scene.add( this.groupMaster );
+    this.scene.add( this.groupRoom1 );
+    this.scene.add( this.groupRoom2 );
+
+    this.groupRoom1.visible = false;
+    this.groupRoom2.visible = false;
+
+    if ( this.room !== 'master' && this.room !== undefined) {
+
+      this.scene.getObjectByName( this.room ).visible = true;
+
+    }
 
 		this.renderer = new WebGL1Renderer( { antialias: true, alpha: true } );
 		this.renderer.setPixelRatio( window.devicePixelRatio );
@@ -109,10 +132,19 @@ class App {
       this.textureButton = document.querySelector('.textureButton')
 
       this.textureButton.addEventListener('click', this.changeTexture.bind( this ) );
+
+    }
+
+    if ( this.room == 'master' || this.room == undefined ) {
+      this.socket.on( 'mostrarRoom', ( room ) => {
+        this.scene.getObjectByName(room).visible = true;
+        this.render();
+      });
     }
 
     const plane = new Mesh(this.geometry, this.material);
     plane.rotation.set( Math.PI / 2, Math.PI, Math.PI );
+    plane.name = 'terrain';
     this.scene.add(plane);
     this.render();
 
@@ -127,7 +159,7 @@ class App {
       const line = new LineSidebar ( this.scene, this.sidebar, data );
       line.createObject();
       line.line.geometry.setPoints( data.points );
-      this.scene.add( line.line );
+      this.scene.getObjectByName( data.room ).add( line.line );
       this.render();
     });
 
@@ -136,7 +168,7 @@ class App {
       if ( id.type == 'icon' ) {
         elem.children[1].element.remove();
       }
-      this.scene.remove( elem );
+      this.scene.getObjectByName( id.room ).remove( elem );
       this.render();
     });
 

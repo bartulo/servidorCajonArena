@@ -126,25 +126,13 @@ io.on( 'connection', ( socket ) => {
     socket.broadcast.emit( 'tecla', tecla );
   });
   socket.on('linea', ( positions ) => {
-    if ( socket.data.room == 'master' ) {
-      socket.broadcast.emit( 'linea', positions );
-    } else {
-      socket.to( socket.data.room ).emit( 'linea', positions );
-    }
+    socket.broadcast.emit( 'linea', positions );
   });
   socket.on('icon', ( coords ) => {
-    if ( socket.data.room == 'master' ) {
-      socket.broadcast.emit( 'icon', coords );
-    } else {
-      socket.to( socket.data.room ).emit( 'icon', coords );
-    }
+    socket.broadcast.emit( 'icon', coords );
   });
   socket.on('remove', ( id ) => {
-    if ( socket.data.room == 'master' ) {
-      socket.broadcast.emit( 'remove', id );
-    } else {
-      socket.to( socket.data.room ).emit( 'remove', id );
-    }
+    socket.broadcast.emit( 'remove', id );
   });
   socket.on('playVideo', ( ) => {
     socket.broadcast.emit( 'playVideo' );
@@ -169,12 +157,15 @@ io.on( 'connection', ( socket ) => {
     var child = exec('xdotool search "Mozilla Firefox" windowactivate --sync key --clearmodifiers ctrl+q');
     //process.kill(-pid);
   });
+  socket.on('mostrarRoom', (room) => {
+    socket.broadcast.emit( 'mostrarRoom', room );
+  });
   socket.on('solicitud', (texto) => {
     socket.broadcast.emit('solicitud');
   });
 
-  socket.on('solicitudAceptada', (escenario) => {
-    socket.broadcast.emit('solicitudAceptada', escenario);
+  socket.on('solicitudAceptada', (data) => {
+    socket.broadcast.emit('solicitudAceptada', data);
   });
 
   socket.on('disconnect', () => {

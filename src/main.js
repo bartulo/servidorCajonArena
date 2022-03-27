@@ -19,14 +19,30 @@ class Tabla {
     this.form = document.querySelector('form');
     this.solicitudModal = new Modal(document.getElementById('solicitud'));
     this.room1 = document.getElementById('room1');
+    this.room2 = document.getElementById('room2');
+    this.mostrarRoom1 = document.getElementById('mostrar-room1');
+    this.mostrarRoom2 = document.getElementById('mostrar-room2');
 
   }
 
   init() {
 
     this.room1.addEventListener('click', () => {
-      socket.emit( 'solicitudAceptada', this.escenario );
+      socket.emit( 'solicitudAceptada', { escenario: this.escenario, room: 'room1' } );
       this.solicitudModal.hide();
+    })
+
+    this.room2.addEventListener('click', () => {
+      socket.emit( 'solicitudAceptada', { escenario: this.escenario, room: 'room2' } );
+      this.solicitudModal.hide();
+    })
+
+    this.mostrarRoom1.addEventListener('click', () => {
+      socket.emit( 'mostrarRoom', 'room1' );
+    })
+
+    this.mostrarRoom2.addEventListener('click', () => {
+      socket.emit( 'mostrarRoom', 'room2' );
     })
 
     socket.on( 'onload', ( p ) => {
@@ -51,7 +67,7 @@ class Tabla {
       this.escenarioActivo( elem.escenario, elem.pid );
     });
 
-    socket.on( 'linea', ( linea ) => {
+    socket.on( 'linea_room', ( linea ) => {
       console.log( linea ); 
     });
 

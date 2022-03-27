@@ -97,6 +97,8 @@ class LineSidebar {
     this.sidebar = sidebar;
     this.sidebar.lineId = this._id;
     this.socketId = this.sidebar.socket.id;
+    this.room = window.location.pathname.split('/')[4];
+    this.group = this.scene.getObjectByName( this.room );
     if ( data ) { /// Si es una copia a través de Broadcast
       this.color = data.color;
       this.nameId = `line_${ data.socketId }_${ data.id }`;
@@ -159,8 +161,8 @@ class LineSidebar {
     this.elem.removeEventListener('click', this.erase);
 
     this.elem.remove();
-    this.scene.remove( this.line );
-    this.sidebar.socket.emit( 'remove', {'id': this._id, 'type': 'line', 'socketId': this.socketId } );
+    this.group.remove( this.line );
+    this.sidebar.socket.emit( 'remove', {'id': this._id, 'type': 'line', 'socketId': this.socketId, 'room': this.room } );
     this.sidebar.controls.dispatchEvent({ type: 'change' });
   }
 
@@ -178,13 +180,17 @@ class IconSidebar {
     this.active = document.querySelector('.ico-content.active');
     this.iconArray = Array.prototype.slice.call( document.querySelector('.modal-content').children );
     this.activeIndex = this.iconArray.indexOf( this.active );
+    this.room = window.location.pathname.split('/')[4];
+    this.sceneGroup = this.scene.getObjectByName( this.room );
     this.viewType = window.location.pathname.split('/')[2];
     if ( data ) { /// Si es una copia a través de Broadcast
       this.iconType = `icon-${ data.type }`;
       this.nameId = `icon_${ data.socketId }_${ data._id }`;
+      this._room = data.room;
     } else { // Si es original
       this.iconType = this.sidebar.iconClass;
       this.nameId = `icon_${ this.socketId }_${ this._id }`;
+      this._room = this.room;
     }
 
   }
@@ -233,7 +239,7 @@ class IconSidebar {
 
     group.add( this.label );
     this.group = group;
-    this.scene.add( group );
+    this.scene.getObjectByName( this._room ).add( group );
 
   }
 

@@ -8,7 +8,7 @@ solicitud.addEventListener('click', () => {
   socket.emit('solicitud', 'hola')
 });
 
-socket.on('solicitudAceptada', ( escenario ) => {
-  document.querySelector('form').action = `${document.location.href}/${escenario}/room1`;
+socket.on('solicitudAceptada', ( data ) => {
+  document.querySelector('form').action = `${document.location.href}/${data.escenario}/${data.room}`;
   document.querySelector('form').submit();
 });
