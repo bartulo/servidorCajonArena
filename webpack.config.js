@@ -2,9 +2,10 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    app: './src/index.js',
-    formulario: './src/formulario.js',
-    main: './src/main.js',
+//    app: './src/index.js',
+//    formulario: './src/formulario.js',
+//    main: './src/main.js',
+    map: './src/maps.js',
   },
   output: {
     filename: 'javascripts/[name].bundle.js',

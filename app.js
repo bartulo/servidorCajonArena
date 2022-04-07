@@ -9,6 +9,7 @@ var hbs = require('hbs');
 
 var indexRouter = require('./routes/index');
 var proyRouter = require('./routes/visor');
+var mapRouter = require('./routes/maps');
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.server.once("connection", () => {
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/app', proyRouter);
+app.use('/mapas', mapRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
