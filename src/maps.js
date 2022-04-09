@@ -4,16 +4,50 @@ import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import proj4 from 'proj4';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { io } from 'socket.io-client';
 
 class Mapa {
   constructor() {
 
+    this.socket = io();
     this.UTM_30 = "+proj=utm +zone=30 +ellps=GRS80 +units=m +no_defs";
     this.aumentar = document.getElementById('aumentar');
     this.reducir = document.getElementById('reducir');
     this.angSlider = document.getElementById('angulo');
     this.angSlider.defaultValue = 0;
 
+    document.addEventListener('keypress', () => {
+      const vertices = this.updateRectangle_UTM();
+      const longs = vertices.map( (x) => { return x[0] } );
+      const lats = vertices.map( (x) => { return x[1] } );
+      console.log('h');
+
+      const minx= Math.min(...longs);
+      const maxx= Math.max(...longs);
+      const miny= Math.min(...lats);
+      const maxy= Math.max(...lats);
+
+      const width = 1080 * Math.abs(Math.sin( this.ang )) + 1920 * Math.abs( Math.cos( this.ang ) );
+      const height = 1080 * Math.abs(Math.cos( this.ang )) + 1920 * Math.abs( Math.sin( this.ang ) );
+
+      //const offsetx = Math.abs(( 1920 - width ) / 2);
+      //const offsety = Math.abs(( 1080 - height ) / 2);
+
+      const offsetx = Math.abs(1080 * Math.sin( this.ang ) * Math.cos( this.ang ));
+      const offsety = Math.abs(1920 * Math.sin( this.ang ) * Math.cos( this.ang ));
+      
+      this.socket.emit( 'mapa', {
+        minx: minx,
+        maxx: maxx,
+        miny: miny,
+        maxy: maxy,
+        width: width,
+        height: height,
+        ang: this.ang,
+        offsetx: offsetx,
+        offsety: offsety
+      });
+    })
     this.aumentar.addEventListener('click', () => {
       this.diagonal += 100;
       console.log( this.diagonal );
@@ -58,6 +92,7 @@ class Mapa {
       this.lat_center = pto2_utm[1] - ( this.largo * 9  )/ 32;
       this.ang = 0;
       L.polygon( this.updateRectangle() ).addTo( this.drawnItems);
+      this.angSlider.value = 0;
     });
     this.map.addControl( this.drawControl );
   }
@@ -73,6 +108,14 @@ class Mapa {
     var pto3_WGS84 = proj4( this.UTM_30, proj4.defs( 'EPSG:4326'), pto3);
     var pto4_WGS84 = proj4( this.UTM_30, proj4.defs( 'EPSG:4326'), pto4);
     return [ [ pto1_WGS84[1], pto1_WGS84[0] ], [ pto2_WGS84[1], pto2_WGS84[0] ], [ pto3_WGS84[1], pto3_WGS84[0] ], [ pto4_WGS84[1], pto4_WGS84[0] ]];
+  }
+
+  updateRectangle_UTM ( ) {
+    var pto1 = [ this.long_center + this.diagonal * Math.cos( 0.51+ this.ang ), this.lat_center + this.diagonal * Math.sin( 0.51+ this.ang ) ];
+    var pto2 = [ this.long_center + this.diagonal * Math.cos( Math.PI - 0.51+ this.ang ), this.lat_center + this.diagonal * Math.sin( Math.PI - 0.51+ this.ang ) ];
+    var pto3 = [ this.long_center + this.diagonal * Math.cos( Math.PI + 0.51+ this.ang ), this.lat_center + this.diagonal * Math.sin( Math.PI + 0.51+ this.ang ) ];
+    var pto4 = [ this.long_center + this.diagonal * Math.cos( -0.51+ this.ang ), this.lat_center + this.diagonal * Math.sin( this.ang - 0.51 ) ];
+    return [pto1, pto2, pto3, pto4];
   }
 }
 

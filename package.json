@@ -16,6 +16,8 @@
     "file-loader": "^6.2.0",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
+    "https": "^1.0.0",
+    "jimp": "^0.16.1",
     "js-tabs": "^1.0.1",
     "leaflet": "^1.7.1",
     "leaflet-draw": "^1.0.4",

@@ -7,6 +7,9 @@
 var app = require('../app');
 var debug = require('debug')('prueba:server');
 var http = require('http');
+var https = require('https');
+var fs = require('fs');
+const Jimp = require('jimp');
 
 /**
  * Get port from environment and store in Express.
@@ -88,6 +91,24 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+}
+
+async function rotate( ang ) {
+  const image = await Jimp.read('temp.png');
+
+  image.rotate( ang * 180 / 3.14 ).write('rotate.png');
+  return image;
+}
+
+async function crop( ang, offsetx, offsety, width, height ) {
+  Jimp.read('temp.png')
+  .then( image => {
+    image.rotate( ang * 180 / 3.14 )
+    .then ( image => {
+      image.crop( offsetx, offsety, width, height )
+      .write('crop.png');
+    });
+  });
 }
 
 const clientes = async function( io ) {
@@ -174,4 +195,20 @@ io.on( 'connection', ( socket ) => {
     }
   });
 
+  socket.on('mapa', ( mapa ) => {
+    const file = fs.createWriteStream('temp.png');
+    console.log(mapa);
+    const r= https.get(`https://www.ign.es/wms-inspire/mapa-raster?request=GetMap&service=WMS&version=1.3.0&layers=mtn_rasterizado&styles=&crs=epsg:25830&bbox=${mapa.minx},${mapa.miny},${mapa.maxx},${mapa.maxy}&width=${mapa.width}&height=${mapa.height}&format=image/png`, function(response) {
+      response.pipe(file);
+      file.on( 'finish', () => {
+        file.close();
+        rotate( -mapa.ang )
+        .then( (image) => {
+          image.crop( mapa.offsetx, mapa.offsety, 1920, 1080 )
+          .write( 'crop.png' );
+        });
+      });
+    });
+  });
+    
 });
