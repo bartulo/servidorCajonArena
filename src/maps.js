@@ -15,8 +15,13 @@ class Mapa {
     this.reducir = document.getElementById('reducir');
     this.angSlider = document.getElementById('angulo');
     this.angSlider.defaultValue = 0;
+    this.descargar = document.getElementById('descargar');
+    this.arriba = document.getElementById('arriba');
+    this.abajo = document.getElementById('abajo');
+    this.izqda = document.getElementById('izqda');
+    this.dcha = document.getElementById('dcha');
 
-    document.addEventListener('keypress', () => {
+    this.descargar.addEventListener('click', () => {
       const vertices = this.updateRectangle_UTM();
       const longs = vertices.map( (x) => { return x[0] } );
       const lats = vertices.map( (x) => { return x[1] } );
@@ -29,9 +34,6 @@ class Mapa {
 
       const width = 1080 * Math.abs(Math.sin( this.ang )) + 1920 * Math.abs( Math.cos( this.ang ) );
       const height = 1080 * Math.abs(Math.cos( this.ang )) + 1920 * Math.abs( Math.sin( this.ang ) );
-
-      //const offsetx = Math.abs(( 1920 - width ) / 2);
-      //const offsety = Math.abs(( 1080 - height ) / 2);
 
       const offsetx = Math.abs(1080 * Math.sin( this.ang ) * Math.cos( this.ang ));
       const offsety = Math.abs(1920 * Math.sin( this.ang ) * Math.cos( this.ang ));
@@ -50,11 +52,26 @@ class Mapa {
     })
     this.aumentar.addEventListener('click', () => {
       this.diagonal += 100;
-      console.log( this.diagonal );
       this.drawnItems.getLayers()[0].setLatLngs( this.updateRectangle() );
     })
     this.reducir.addEventListener('click', () => {
       this.diagonal -= 100;
+      this.drawnItems.getLayers()[0].setLatLngs( this.updateRectangle() );
+    })
+    this.dcha.addEventListener('click', () => {
+      this.long_center += 100;
+      this.drawnItems.getLayers()[0].setLatLngs( this.updateRectangle() );
+    })
+    this.izqda.addEventListener('click', () => {
+      this.long_center -= 100;
+      this.drawnItems.getLayers()[0].setLatLngs( this.updateRectangle() );
+    })
+    this.arriba.addEventListener('click', () => {
+      this.lat_center += 100;
+      this.drawnItems.getLayers()[0].setLatLngs( this.updateRectangle() );
+    })
+    this.abajo.addEventListener('click', () => {
+      this.lat_center -= 100;
       this.drawnItems.getLayers()[0].setLatLngs( this.updateRectangle() );
     })
     this.angSlider.addEventListener('change', () => {
