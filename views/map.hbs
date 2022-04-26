@@ -10,4 +10,23 @@
 <input type="range" class="form-range" id="angulo" value=0 max=1.7 min=-1.7 step=0.02>
 <button id="descargar" type="button" class="btn btn-success">Descargar</button>
 
+<div id="descargando" class="modal" tabindex="-1">
+  <form method="post"></form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Descargando</h5>
+      </div>
+      <div class="modal-body">
+        <div class="spinner-border" role="status">
+          <span class="sr-only"></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <p>Descargando imágenes del IGN</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="/javascripts/map.bundle.js"></script>

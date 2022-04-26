@@ -12,6 +12,7 @@ var fs = require('fs');
 var im = require('imagemagick');
 const fetch = require('node-fetch');
 const Jimp = require('jimp');
+const { exec } = require('child_process');
 
 /**
  * Get port from environment and store in Express.
@@ -99,13 +100,21 @@ async function rotate( file, mapa, tipo ) {
   const image = await Jimp.read( file );
   image.rotate( -mapa.ang * 180 / 3.14 )
   .crop( mapa.offsetx, mapa.offsety, 1920, 1080 )
-  .write( `${tipo}.png` );
+  // ATENCION habría que crear un if cuando no existe la carpeta temp
+  .write( `public/images/${tipo}_temp.png` );
 
 }
 
 async function rotateMDT( ang ) {
   return new Promise( resolve => {
     im.convert( ['mdt.tif', '-rotate', ang, 'rotate.tif'], resolve );
+  });
+}
+
+async function cropMDT( arg ) {
+  console.log(arg);
+  return new Promise( resolve => {
+    im.convert( ['rotate.tif', '-crop', arg, 'crop.tif'], resolve );
   });
 }
 
@@ -137,7 +146,7 @@ async function loadImgData( img ) {
   });
 }
 
-async function cropMDT( url, mapa ) {
+async function downloadMDT( url, mapa ) {
   console.log( url );
   const w = await writeMDT( url )
   const ang = mapa.ang * 180 / Math.PI; 
@@ -146,15 +155,13 @@ async function cropMDT( url, mapa ) {
   const height = mapa.height;
   const r = await rotateMDT( ang );
   const c = await loadImgData( 'mdt.tif' ).then( (f) => { 
-    console.log( f.width, f.height );
-    console.log( width / f.width );
-    console.log( height / f.height );
     const ratio = f.width / width;
     const cropWidth = 1920 * ratio;
     const cropHeight = 1080 * ratio;
     const cropOffsetX = mapa.offsetx * ratio;
     const cropOffsetY = mapa.offsety * ratio;
-    im.convert( ['rotate.tif', '-crop', `${cropWidth}x${cropHeight}+${cropOffsetX}+${cropOffsetY}`, 'crop.tif'] );
+    cropMDT(`${cropWidth}x${cropHeight}+${cropOffsetX}+${cropOffsetY}`)
+    .then(exec('gdal_translate -of ENVI crop.tif public/images/mdt_temp.bin'));
   } );
 
 }  
@@ -173,7 +180,7 @@ const loadData = async function( mapa ) {
   console.log( mapa );
   const topo = await writeImage(`https://www.ign.es/wms-inspire/mapa-raster?request=GetMap&service=WMS&version=1.3.0&layers=mtn_rasterizado&styles=&crs=epsg:25830&bbox=${mapa.minx},${mapa.miny},${mapa.maxx},${mapa.maxy}&width=${mapa.width}&height=${mapa.height}&format=image/png`, 'topo', mapa);
   const pnoa = await writeImage(`https://www.ign.es/wms-inspire/pnoa-ma?request=GetMap&service=WMS&version=1.3.0&layers=OI.OrthoimageCoverage&styles=&crs=epsg:25830&bbox=${mapa.minx},${mapa.miny},${mapa.maxx},${mapa.maxy}&width=${mapa.width}&height=${mapa.height}&format=image/png`, 'pnoa', mapa);
-  const mdt = await cropMDT(`https://servicios.idee.es/wcs-inspire/mdt?version=2.0.1&request=GetCoverage&service=WCS&coverageId=Elevacion25830_5&subset=Long(${mapa.minx},${mapa.maxx})&subset=Lat(${mapa.miny},${mapa.maxy})&format=image/tiff`, mapa);
+  const mdt = await downloadMDT(`https://servicios.idee.es/wcs-inspire/mdt?version=2.0.1&request=GetCoverage&service=WCS&coverageId=Elevacion25830_5&subset=Long(${mapa.minx},${mapa.maxx})&subset=Lat(${mapa.miny},${mapa.maxy})&format=image/tiff`, mapa);
 }
 
 const clientes = async function( io ) {
@@ -261,7 +268,10 @@ io.on( 'connection', ( socket ) => {
   });
 
   socket.on('mapa', ( mapa ) => {
-    loadData( mapa );
+    loadData( mapa ).then( () => {
+      console.log( 'des' );
+      socket.emit( 'descargado' );
+    });
   });
     
 });

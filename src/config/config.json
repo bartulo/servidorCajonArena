@@ -28,6 +28,13 @@
   },
 
   {
+    "name": "temp",
+    "meshWidth": 338, 
+    "meshHeight": 190,
+    "widthKm": 2
+  },
+
+  {
     "name": "tortuero2",
     "meshWidth": 400, 
     "meshHeight": 225,

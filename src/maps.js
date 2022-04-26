@@ -3,8 +3,10 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import proj4 from 'proj4';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { io } from 'socket.io-client';
+import { Modal } from 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './css/main.css';
 
 class Mapa {
   constructor() {
@@ -20,12 +22,17 @@ class Mapa {
     this.abajo = document.getElementById('abajo');
     this.izqda = document.getElementById('izqda');
     this.dcha = document.getElementById('dcha');
+    this.descargandoModal = new Modal(document.getElementById('descargando'));
+    this.descargandoModal.hide();
+    this.modal = document.querySelector('.modal-dialog');
+    this.modalBody = document.querySelector('.modal-body');
+    this.modalFooter = document.querySelector('.modal-footer');
+    this.modalHeader = document.querySelector('.modal-header');
 
     this.descargar.addEventListener('click', () => {
       const vertices = this.updateRectangle_UTM();
       const longs = vertices.map( (x) => { return x[0] } );
       const lats = vertices.map( (x) => { return x[1] } );
-      console.log('h');
 
       const minx= Math.min(...longs);
       const maxx= Math.max(...longs);
@@ -49,7 +56,15 @@ class Mapa {
         offsetx: offsetx,
         offsety: offsety
       });
+      this.descargandoModal.show();
     })
+    this.socket.on( 'descargado', () => {
+      console.log('descaragdo');
+      this.modalBody.innerHTML = '<img class="downloaded" src="images/topo_temp.png"><img class="downloaded" src="images/pnoa_temp.png">';
+      this.modalFooter.innerHTML = '<p>Imagenes descargadas del IGN</p><button id="crear-escenario" class="btn btn-success">Crear Escenario</button>';
+      this.modalHeader.innerHTML = '<h5>Imágenes descargadas</h5>';
+      this.modal.style.maxWidth = "1200px";
+    });
     this.aumentar.addEventListener('click', () => {
       this.diagonal += 100;
       this.drawnItems.getLayers()[0].setLatLngs( this.updateRectangle() );
