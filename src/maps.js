@@ -28,6 +28,9 @@ class Mapa {
     this.modalBody = document.querySelector('.modal-body');
     this.modalFooter = document.querySelector('.modal-footer');
     this.modalHeader = document.querySelector('.modal-header');
+    this.form = document.querySelector('form');
+    this.w = 3641;
+    this.h = 2048;
 
     this.descargar.addEventListener('click', () => {
       const vertices = this.updateRectangle_UTM();
@@ -42,9 +45,29 @@ class Mapa {
       const width = 1080 * Math.abs(Math.sin( this.ang )) + 1920 * Math.abs( Math.cos( this.ang ) );
       const height = 1080 * Math.abs(Math.cos( this.ang )) + 1920 * Math.abs( Math.sin( this.ang ) );
 
+      let squareWidth = 2048 * Math.abs(Math.sin( this.ang )) + 3641 * Math.abs( Math.cos( this.ang ) );
+      let squareHeight = 2048 * Math.abs(Math.cos( this.ang )) + 3641 * Math.abs( Math.sin( this.ang ) );
+      console.log( 'antes', squareWidth );
+
+      //const squareWidth = Math.abs( width + ( 2048 - 1080 ) * Math.sin( this.ang ) + ( 2048 - 1920 ) * Math.cos( this.ang ) );
+      //const squareHeight = Math.abs( width + ( 2048 - 1920 ) * Math.sin( this.ang ) + ( 2048 - 1080 ) * Math.cos( this.ang ) );
+
       const offsetx = Math.abs(1080 * Math.sin( this.ang ) * Math.cos( this.ang ));
       const offsety = Math.abs(1920 * Math.sin( this.ang ) * Math.cos( this.ang ));
       
+      let sOffsetx = Math.abs(2048 * Math.sin( this.ang ) * Math.cos( this.ang ));
+      let sOffsety = Math.abs(3641 * Math.sin( this.ang ) * Math.cos( this.ang ));
+      
+      // CONDICIONAL NECESARIO EN ALGUNOS ANGULOS PARA QUE NO SE SUPERE EL LÍMITE DE 4096px DEL WMS
+      if ( squareWidth > 4096 || squareHeight > 4096 ) {
+        squareWidth = 2007 * Math.abs(Math.sin( this.ang )) + 3568 * Math.abs( Math.cos( this.ang ) );
+        squareHeight = 2007 * Math.abs(Math.cos( this.ang )) + 3568 * Math.abs( Math.sin( this.ang ) );
+        sOffsetx = Math.abs(2007 * Math.sin( this.ang ) * Math.cos( this.ang ));
+        sOffsety = Math.abs(3568 * Math.sin( this.ang ) * Math.cos( this.ang ));
+        this.w = 3568;
+        this.h = 2007;
+      }
+
       this.socket.emit( 'mapa', {
         minx: minx,
         maxx: maxx,
@@ -54,16 +77,29 @@ class Mapa {
         height: height,
         ang: this.ang,
         offsetx: offsetx,
-        offsety: offsety
+        offsety: offsety,
+        sWidth: squareWidth,
+        sHeight: squareHeight,
+        sOffsetx: sOffsetx,
+        sOffsety: sOffsety,
+        w: this.w,
+        h: this.h
       });
       this.descargandoModal.show();
     })
-    this.socket.on( 'descargado', () => {
-      console.log('descaragdo');
-      this.modalBody.innerHTML = '<img class="downloaded" src="images/topo_temp.png"><img class="downloaded" src="images/pnoa_temp.png">';
+    this.socket.on( 'descargado', ( values ) => {
+      console.log( values );
+      this.values = values;
+      this.modalBody.innerHTML = '<img class="downloaded" src="images/topo_temp2.png"><img class="downloaded" src="images/pnoa_temp2.png">';
       this.modalFooter.innerHTML = '<p>Imagenes descargadas del IGN</p><button id="crear-escenario" class="btn btn-success">Crear Escenario</button>';
       this.modalHeader.innerHTML = '<h5>Imágenes descargadas</h5>';
       this.modal.style.maxWidth = "1200px";
+      this.crearEscenario = document.getElementById('crear-escenario');
+      this.crearEscenario.addEventListener('click', () => {
+        console.log( this.values, values );
+        this.form.action = `http://localhost:3000/app/visor/temp/room1/${this.values.width}/${this.values.height}/4`;
+        this.form.submit();
+      });
     });
     this.aumentar.addEventListener('click', () => {
       this.diagonal += 100;

@@ -20,7 +20,6 @@ import { OrbitControlsMod } from './OrbitControlsMod';
 import { Sidebar, IconSidebar, LineSidebar } from './sidebar.js';
 
 require.context('./images', true, /\.(png|bin|webm)$/)
-import Config from './config/config.json';
 import './css/sidebar.css';
 import './css/main.css';
 
@@ -31,7 +30,6 @@ class App {
     this.viewType = window.location.pathname.split('/')[2];
     this.escenario = window.location.pathname.split('/')[3];
     this.room = window.location.pathname.split('/')[4];
-    this.config = Config.filter( obj => obj.name === this.escenario )[0];
     this.socket = io( );
     this.socket.emit( 'data', { tipo: this.viewType, escenario: this.escenario, room: this.room } ); 
     this.video = document.createElement('video');

@@ -14,6 +14,7 @@ class OrbitControlsMod extends OrbitControls {
     this.sidebar.controls = this;
     this.room = window.location.pathname.split('/')[4];
     this.group = this.scene.getObjectByName( this.room );
+    console.log( 'orb', this.room );
     document.addEventListener( 'openSidebar', this.openSidebar );
     document.addEventListener( 'closeSidebar', this.closeSidebar );
   }

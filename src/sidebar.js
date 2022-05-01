@@ -239,6 +239,7 @@ class IconSidebar {
 
     group.add( this.label );
     this.group = group;
+    console.log( this._room );
     this.scene.getObjectByName( this._room ).add( group );
 
   }
@@ -277,8 +278,9 @@ class IconSidebar {
 
     this.elem.remove();
     this.label.element.remove();
-    this.scene.remove( this.group );
-    this.sidebar.socket.emit( 'remove', {'id': this._id, 'type': 'icon', 'socketId': this.socketId } );
+//    this.scene.remove( this.group );
+    this.scene.getObjectByName( this._room ).remove( this.group );
+    this.sidebar.socket.emit( 'remove', {'id': this._id, 'type': 'icon', 'socketId': this.socketId, 'room': this._room  } );
     this.sidebar.controls.dispatchEvent({ type: 'change' });
 
   }

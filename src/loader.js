@@ -14,7 +14,15 @@ class AssetsLoader {
     this.app = new App();
     this.loc = window.location.pathname.split('/')[3];
     this.viewType = window.location.pathname.split('/')[2];
-    this.config = Config.filter( obj => obj.name === this.loc )[0];
+    if ( this.loc == 'temp' ) {
+      this.width = window.location.pathname.split('/')[5];
+      this.height = window.location.pathname.split('/')[6];
+      this.km = window.location.pathname.split('/')[7];
+      this.config = { meshWidth: this.width, meshHeight: this.height, widthKm: this.km };
+      console.log(this.config);
+    } else {
+      this.config = Config.filter( obj => obj.name === this.loc )[0];
+    }
   }
 
   init () {
