@@ -97,7 +97,7 @@ class Mapa {
       this.crearEscenario = document.getElementById('crear-escenario');
       this.crearEscenario.addEventListener('click', () => {
         console.log( this.values, values );
-        this.form.action = `http://localhost:3000/app/visor/temp/room1/${this.values.width}/${this.values.height}/4`;
+        this.form.action = `${document.location.origin}/app/visor/temp/room1/${this.values.width}/${this.values.height}/2`;
         this.form.submit();
       });
     });
