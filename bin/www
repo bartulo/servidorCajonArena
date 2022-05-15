@@ -163,7 +163,7 @@ async function downloadMDT( url, mapa ) {
     const cropHeight = Math.floor( 1080 * ratio );
     const cropOffsetX = mapa.offsetx * ratio;
     const cropOffsetY = mapa.offsety * ratio;
-    values = { width: cropWidth, height: cropHeight };
+    values = { width: cropWidth, height: cropHeight, width_km: mapa.width_km };
     cropMDT(`${cropWidth}x${cropHeight}+${cropOffsetX}+${cropOffsetY}`)
     .then(exec('gdal_translate -of ENVI crop.tif public/images/mdt_temp.bin'));
   } );

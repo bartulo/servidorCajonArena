@@ -42,6 +42,11 @@ class Mapa {
       const miny= Math.min(...lats);
       const maxy= Math.max(...lats);
 
+      const dx = Math.abs( vertices[0][0] - vertices[2][0] );
+      const dy = Math.abs( vertices[0][1] - vertices[2][1] );
+      const width_km = Math.ceil( Math.sqrt( Math.pow( dx, 2 ) + Math.pow( dy, 2 ) ) * Math.cos( 0.512 ) / 1000 );
+      console.log( width_km );
+
       const width = 1080 * Math.abs(Math.sin( this.ang )) + 1920 * Math.abs( Math.cos( this.ang ) );
       const height = 1080 * Math.abs(Math.cos( this.ang )) + 1920 * Math.abs( Math.sin( this.ang ) );
 
@@ -75,6 +80,7 @@ class Mapa {
         maxy: maxy,
         width: width,
         height: height,
+        width_km: width_km,
         ang: this.ang,
         offsetx: offsetx,
         offsety: offsety,
@@ -97,7 +103,7 @@ class Mapa {
       this.crearEscenario = document.getElementById('crear-escenario');
       this.crearEscenario.addEventListener('click', () => {
         console.log( this.values, values );
-        this.form.action = `${document.location.origin}/app/visor/temp/room1/${this.values.width}/${this.values.height}/2`;
+        this.form.action = `${document.location.origin}/app/visor/temp/room1/${this.values.width}/${this.values.height}/${this.values.width_km}`;
         this.form.submit();
       });
     });
