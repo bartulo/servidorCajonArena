@@ -6,6 +6,7 @@ var logger = require('morgan');
 var livereload = require('livereload');
 var connectLiveReload = require('connect-livereload');
 var hbs = require('hbs');
+var siofu = require('socketio-file-upload');
 
 var indexRouter = require('./routes/index');
 var proyRouter = require('./routes/visor');
@@ -21,6 +22,7 @@ liveReloadServer.server.once("connection", () => {
 var app = express();
 
 app.use(connectLiveReload());
+app.use(siofu.router);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

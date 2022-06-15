@@ -9,7 +9,7 @@ import {
   Color,
   OrthographicCamera,
   Group,
-  Object3D
+  Object3D,
 } from 'three';
 
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
@@ -106,7 +106,8 @@ class App {
 
       controls.screenSpacePanning = false;
       controls.maxPolarAngle = Math.PI / 2;
-      controls.addEventListener('change', this.render.bind( this ) );
+      // TODO
+      //controls.addEventListener('change', this.render.bind( this ) );
     } else if ( this.viewType == 'proyector' ) {
       const controls = new OrbitControls( this.camera, this.renderer.domElement );
       controls.enabled = false;
@@ -118,7 +119,10 @@ class App {
 
     var uniforms = {
       texture: { type: 't', value: this.texture },
-      texture2: { type: 't', value: textureVideo }
+      texture2: { type: 't', value: textureVideo },
+      texture_at: { type: 't', value: this.texture_at },
+      //// TODO
+      u_time: { type: 'f', value: 0 }
     }
     this.material = new ShaderMaterial({
       uniforms: uniforms,
@@ -215,6 +219,8 @@ class App {
 
     if ( this.video.paused == false ) {
       requestAnimationFrame( this.render.bind( this ) );
+      //TODO
+      this.material.uniforms.u_time.value += 0.0005;
     }
     this.renderer.render( this.scene, this.camera );
     this.labelRenderer.render( this.scene, this.camera );

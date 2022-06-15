@@ -10,6 +10,8 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var im = require('imagemagick');
+var siofu = require("socketio-file-upload");
+var gdal = require('gdal-async');
 const fetch = require('node-fetch');
 const Jimp = require('jimp');
 const { exec } = require('child_process');
@@ -106,16 +108,16 @@ async function rotate( file, mapa, tipo ) {
 
 }
 
-async function rotateMDT( ang ) {
+async function rotateMDT( ang, src, dst ) {
   return new Promise( resolve => {
-    im.convert( ['mdt.tif', '-rotate', ang, 'rotate.tif'], resolve );
+    im.convert( [src, '-rotate', ang, dst], resolve );
   });
 }
 
-async function cropMDT( arg ) {
+async function cropMDT( arg, src, dst ) {
   console.log(arg);
   return new Promise( resolve => {
-    im.convert( ['rotate.tif', '-crop', arg, 'crop.tif'], resolve );
+    im.convert( [src, '-crop', arg, dst], resolve );
   });
 }
 
@@ -156,7 +158,7 @@ async function downloadMDT( url, mapa ) {
   console.log( 'ang: ', ang);
   const width = mapa.width;
   const height = mapa.height;
-  const r = await rotateMDT( ang );
+  const r = await rotateMDT( ang, 'mdt.tif', 'rotate.tif' );
   const c = await loadImgData( 'mdt.tif' ).then( (f) => { 
     const ratio = f.width / width;
     const cropWidth = Math.floor( 1920 * ratio );
@@ -164,11 +166,52 @@ async function downloadMDT( url, mapa ) {
     const cropOffsetX = mapa.offsetx * ratio;
     const cropOffsetY = mapa.offsety * ratio;
     values = { width: cropWidth, height: cropHeight, width_km: mapa.width_km };
-    cropMDT(`${cropWidth}x${cropHeight}+${cropOffsetX}+${cropOffsetY}`)
-    .then(exec('gdal_translate -of ENVI crop.tif public/images/mdt_temp.bin'));
+    cropMDT(`${cropWidth}x${cropHeight}+${cropOffsetX}+${cropOffsetY}`, 'rotate.tif', 'crop.tif')
+    .then( () => {
+      const crop = gdal.open( 'crop.tif' );
+      gdal.translate( 'public/images/mdt_temp.bin', crop, [ '-of', 'ENVI' ] );
+    });
   } );
 
-}  
+}
+
+async function translateAT( mapa ) {
+  return new Promise( resolve => {
+    const at = gdal.open('public/uploads/SIM_arrival_time_Tortuero.txt');
+    gdal.translate('translated.png', at, [ '-of', 'PNG', '-scale', '0 9 0 255', '-a_nodata', '255', '-projwin', mapa.minx, mapa.maxy, mapa.maxx, mapa.miny]);
+    console.log( mapa.minx, mapa.maxy, mapa.maxx, mapa.miny );
+    setTimeout(resolve, 5000);
+//    const watcher = fs.watch( '/home/nano/JUAN_nuevo/WEBAPP/translated.tif', ( eventType, filename ) => {
+//      watcher.close();
+//      resolve();
+//    });
+  });
+}
+
+async function rotAt( mapa ) {
+  const image = await Jimp.read( 'translated.png' );
+  await image.rotate( -mapa.ang * 180 / 3.14 );
+  await image.writeAsync('atrotado.png' )
+}
+
+async function rotateAT( mapa ) {
+  const rot = await rotAt( mapa );
+ 
+  const width = mapa.width;
+  const height = mapa.height;
+  const image = await Jimp.read( 'atrotado.png' );
+  const c = await loadImgData( 'translated.png' ).then( (f) => { 
+    const ratio = f.width / width;
+    const cropWidth = Math.floor( 1920 * ratio );
+    const cropHeight = Math.floor( 1080 * ratio );
+    const cropOffsetX = mapa.offsetx * ratio;
+    const cropOffsetY = mapa.offsety * ratio;
+
+    image.crop( cropOffsetX, cropOffsetY, cropWidth, cropHeight )
+    .write( 'atcrop.png' );
+  });
+}
+ 
 
 async function writeImage( url, tipo, mapa ) {
   const d = await loadFile( url )
@@ -185,6 +228,8 @@ const loadData = async function( mapa ) {
   const topo = await writeImage(`https://www.ign.es/wms-inspire/mapa-raster?request=GetMap&service=WMS&version=1.3.0&layers=mtn_rasterizado&styles=&crs=epsg:25830&bbox=${mapa.minx},${mapa.miny},${mapa.maxx},${mapa.maxy}&width=${mapa.sWidth}&height=${mapa.sHeight}&format=image/png`, 'topo', mapa);
   const pnoa = await writeImage(`https://www.ign.es/wms-inspire/pnoa-ma?request=GetMap&service=WMS&version=1.3.0&layers=OI.OrthoimageCoverage&styles=&crs=epsg:25830&bbox=${mapa.minx},${mapa.miny},${mapa.maxx},${mapa.maxy}&width=${mapa.sWidth}&height=${mapa.sHeight}&format=image/png`, 'pnoa', mapa);
   const mdt = await downloadMDT(`https://servicios.idee.es/wcs-inspire/mdt?version=2.0.1&request=GetCoverage&service=WCS&coverageId=Elevacion25830_25&subset=Long(${mapa.minx},${mapa.maxx})&subset=Lat(${mapa.miny},${mapa.maxy})&format=image/tiff`, mapa);
+  const arrivalTime = await translateAT( mapa );
+  const atcrop = await rotateAT( mapa )
 }
 
 const clientes = async function( io ) {
@@ -206,6 +251,16 @@ const clientes = async function( io ) {
 let pidG = 0;
 
 io.on( 'connection', ( socket ) => {
+
+  var uploader = new siofu();
+  uploader.dir = "public/uploads";
+  uploader.listen(socket);
+
+  uploader.on( 'saved', ( event ) => {
+    var at = gdal.open(event.file.pathName);
+    var dst =  gdal.translate( 'public/uploads/temp.png', at, [ '-of', 'png', '-ot', 'Byte', '-scale', '0 24 0 255' ]);
+    socket.emit( 'at', at );
+  });
 
   clientes( io ).then( ( v ) => {
     socket.emit('onload', v );
@@ -273,7 +328,6 @@ io.on( 'connection', ( socket ) => {
 
   socket.on('mapa', ( mapa ) => {
     loadData( mapa ).then( () => {
-      console.log( 'des' );
       socket.emit( 'descargado', values );
     });
   });

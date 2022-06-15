@@ -45,6 +45,15 @@ class AssetsLoader {
       });
     }));
 
+    // TODO
+    promises.push( new Promise( resolve => {
+      loader.load( `/images/at_${ this.loc }2.png`, ( t ) => {
+        this.app.texture_at = t;
+
+        resolve( );
+      });
+    }));
+
     const terrainLoader = new TerrainLoader();
 
     if ( this.viewType == 'visor' ) {

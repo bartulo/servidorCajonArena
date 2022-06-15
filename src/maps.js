@@ -31,6 +31,8 @@ class Mapa {
     this.form = document.querySelector('form');
     this.w = 3641;
     this.h = 2048;
+    var uploader = new SocketIOFileUpload(this.socket);
+    uploader.listenOnInput(document.getElementById("at"));
 
     this.descargar.addEventListener('click', () => {
       const vertices = this.updateRectangle_UTM();
@@ -103,10 +105,34 @@ class Mapa {
       this.crearEscenario = document.getElementById('crear-escenario');
       this.crearEscenario.addEventListener('click', () => {
         console.log( this.values, values );
-        this.form.action = `${document.location.origin}/app/visor/temp/room1/${this.values.width}/${this.values.height}/${this.values.width_km}`;
+        this.form.action = `${document.location.origin}/app/visor/temp/master/${this.values.width}/${this.values.height}/${this.values.width_km}`;
         this.form.submit();
       });
     });
+
+    this.socket.on( 'at', (data) => {
+      const at_long = data.geoTransform[0] + ( data.geoTransform[1] / 2 ) * data.rasterSize.x;
+      const at_lat = data.geoTransform[3] + ( data.geoTransform[5] / 2 ) * data.rasterSize.y;
+      const center = proj4( this.UTM_30, proj4.defs( 'EPSG:4326' ), [ at_long, at_lat ] );
+
+      const ll_long = data.geoTransform[0];
+      const ll_lat = data.geoTransform[3] + data.geoTransform[5] * data.rasterSize.y;
+
+      const ll = proj4( this.UTM_30, proj4.defs( 'EPSG:4326' ), [ ll_long, ll_lat ] );
+
+      const ur_long = data.geoTransform[0] + data.geoTransform[1] * data.rasterSize.x;
+      const ur_lat = data.geoTransform[3];
+
+      const ur = proj4( this.UTM_30, proj4.defs( 'EPSG:4326' ), [ ur_long, ur_lat ] );
+
+      this.map.setZoom(12);
+      const corner1 = L.latLng( center[1] - 0.5, center[0] - 0.5 );
+      const corner2 = L.latLng( center[1] + 0.5, center[0] + 0.5 );
+      this.map.fitBounds([ [center[1] - 0.5, center[0] - 0.5], [center[1] + 0.5, center[0] + 0.5 ] ]);
+      console.log( center );
+      L.imageOverlay( 'uploads/temp.png', [[ll[1], ll[0]], [ur[1], ur[0]]] ).addTo(this.map);
+    });
+
     this.aumentar.addEventListener('click', () => {
       this.diagonal += 100;
       this.drawnItems.getLayers()[0].setLatLngs( this.updateRectangle() );
