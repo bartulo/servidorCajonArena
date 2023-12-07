@@ -241,13 +241,14 @@ io.on( 'connection', ( socket ) => {
     socket.broadcast.emit( 'skipTo', skipTo );
   });
   socket.on('openBrowser', (e) => {
-    process.env['DISPLAY'] = ':0';
-    var spawn = require('child_process').spawn
-    var child = spawn("firefox", ["-private-window", "--kiosk", "http://localhost:3000/app/proyector/" + e], {detached: true});
-    var pidof = child.pid;
-    socket.data.pid = pidof;
-    pidG = pidof;
-    io.emit('opened', {pid: pidof, escenario: e});
+//    process.env['DISPLAY'] = ':0';
+//    var spawn = require('child_process').spawn
+//    var child = spawn("firefox", ["-private-window", "--kiosk", "http://localhost:3000/app/proyector/" + e], {detached: true});
+//    var pidof = child.pid;
+//    socket.data.pid = pidof;
+//    pidG = pidof;
+//    io.emit('opened', {pid: pidof, escenario: e});
+    io.emit('opened', {pid: 1, escenario: e});
   });
   socket.on('stop', (pid) => {
     var exec = require('child_process').exec;
