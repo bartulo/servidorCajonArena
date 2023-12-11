@@ -278,5 +278,49 @@ io.on( 'connection', ( socket ) => {
       socket.emit( 'descargado', values );
     });
   });
+
+  socket.on('saveName', (escenario) => {
+    fs.copyFile('public/images/mdt_temp.bin', 'public/images/mdt_' + escenario.name + '.bin', (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    fs.copyFile('public/images/topo_temp.png', 'public/images/topo_' + escenario.name + '.png',  (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    fs.copyFile('public/images/pnoa_temp.png', 'public/images/pnoa_' + escenario.name + '.png', (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    fs.readFile('src/config/config.json', (error, data) => {
+      if (error) {
+        console.log(error);
+	      return;
+      }
+	    const conf = JSON.parse(data);
+	    console.log(escenario);
+	    new_data = {
+		    'name': escenario.name,
+		    'meshWidth': escenario.mw,
+		    'meshHeight': escenario.mh,
+		    'widthKm': escenario.kw
+	    }
+	    conf.push(new_data);
+	    fs.writeFile('src/config/config.json', JSON.stringify(conf, null, 2), (error) => {
+		    if (error) {
+			    console.log(error);
+		    }
+	    });
+    });
+    fs.copyFile('src/config/config.json', 'routes/config.json', (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+
     
 });

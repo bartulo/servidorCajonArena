@@ -8,6 +8,7 @@ class Sidebar {
   constructor ( socket ) {
     this.socket = socket;
     this.room = window.location.pathname.split('/')[4];
+    this.escenario = window.location.pathname.split('/')[3];
 
   }
 
@@ -22,7 +23,8 @@ class Sidebar {
       item.addEventListener('click', this.newColorClicked );
     });
 
-    if ( this.room == 'master' ) {
+    if ( this.room == 'master' && this.escenario != 'temp' ) {
+	    console.log(this.escenario);
       this.seek = document.getElementById('new-seek');
       this.videoButton = document.querySelector('.video-button');
 

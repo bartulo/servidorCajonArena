@@ -31,13 +31,14 @@ router.post('/visor/:id/:type', function(req, res, next) {
   });
 });
 
-router.post('/visor/temp/room1/:width/:height/:km', function(req, res, next) {
+router.post('/visor/temp/master/:width/:height/:km', function(req, res, next) {
   res.render('visor/visor.hbs', {
     title: 'Visor3D',
     localizacion: 'temp',
     viewType: 'visor',
     renderSidebar: true,
-    room: false
+    room: 'temp',
+    save: true
   });
 });
 

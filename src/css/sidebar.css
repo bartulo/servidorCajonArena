@@ -110,6 +110,12 @@
   right: 20px;
 }
 
+.save {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+}
+
 .modal {
   display: block;
   z-index: 1;

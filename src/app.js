@@ -19,6 +19,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OrbitControlsMod } from './OrbitControlsMod';
 import { Sidebar, IconSidebar, LineSidebar } from './sidebar.js';
 
+import { Modal } from 'bootstrap';
+
 require.context('./images', true, /\.(png|bin|webm)$/)
 import './css/sidebar.css';
 import './css/main.css';
@@ -42,6 +44,7 @@ class App {
     this.sidebar.app = this;
     this.terrainVS = require('./shaders/terrainVS.glsl');
     this.terrainFS = require('./shaders/terrainFS.glsl');
+		console.log(this.escenario);
 
     if ( this.viewType == 'visor' ) {
 
@@ -132,6 +135,18 @@ class App {
       this.textureButton.addEventListener('click', this.changeTexture.bind( this ) );
 
     }
+
+//    if ( this.escenario == 'temp' ) {
+//      this.saveModal = new Modal(document.getElementById('save'));
+//      this.saveModal.hide();
+//      this.saveButton = document.querySelector('.save')
+//      this.saveButton.addEventListener('click', this.save.bind( this ) );
+//      this.saveNameButton = document.querySelector('#saveName');
+//      this.saveNameButton.addEventListener('click', this.saveName.bind( this ) );
+//      this.mW = window.location.pathname.split('/')[5];
+//      this.mH = window.location.pathname.split('/')[6];
+//      this.wK = window.location.pathname.split('/')[7];
+//    }
 
     if ( this.room == 'master' || this.room == undefined ) {
       this.socket.on( 'mostrarRoom', ( room ) => {
@@ -237,6 +252,21 @@ class App {
 
     }
     this.render();
+  }
+
+  save() {
+    this.saveModal.show();
+  }
+
+  saveName() {
+	  const name = document.querySelector('#recipient-name').value;
+	  console.log(this.wK);
+	  this.socket.emit('saveName', {
+	  name: name,
+	  mw: this.mW,
+	  mh: this.mH,
+	  kw: this.wK
+	  });
   }
 
 }

@@ -1,44 +1,45 @@
 [
   {
     "name": "tortuero",
-    "meshWidth": 400,
+    "meshWidth": 400, 
     "meshHeight": 225,
     "widthKm": 7
   },
+
   {
     "name": "navalcan",
-    "meshWidth": 376,
+    "meshWidth": 376, 
     "meshHeight": 212,
     "widthKm": 4
   },
+
   {
     "name": "barchin",
-    "meshWidth": 400,
+    "meshWidth": 400, 
     "meshHeight": 225,
     "widthKm": 5
   },
+
   {
     "name": "canada",
-    "meshWidth": 400,
+    "meshWidth": 400, 
     "meshHeight": 225,
     "widthKm": 5
   },
+
   {
     "name": "temp",
-    "meshWidth": 338,
+    "meshWidth": 338, 
     "meshHeight": 190,
     "widthKm": 2
   },
+
   {
     "name": "tortuero2",
-    "meshWidth": 400,
+    "meshWidth": 400, 
     "meshHeight": 225,
     "widthKm": 5
-  },
-  {
-    "name": "probando",
-    "meshWidth": "63",
-    "meshHeight": "35",
-    "widthKm": "2"
   }
 ]
+
+
