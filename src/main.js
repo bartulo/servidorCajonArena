@@ -111,6 +111,16 @@ class Tabla {
         socket.emit( 'openBrowser', escenario );
       });
 
+      e.children[2].innerHTML = '';
+      let borrar = document.createElement( 'a' );
+      borrar.href = "#";
+      borrar.title = borrar;
+      borrar.innerHTML = 'Borrar';
+      e.children[2].appendChild( borrar );
+      borrar.addEventListener( 'click', () => {
+        socket.emit( 'borrarEscenario', escenario );
+      });
+
     });
 
     this.listado.style.display = 'block';

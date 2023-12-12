@@ -22,6 +22,7 @@ import { Sidebar, IconSidebar, LineSidebar } from './sidebar.js';
 import { Modal } from 'bootstrap';
 
 require.context('./images', true, /\.(png|bin|webm)$/)
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/sidebar.css';
 import './css/main.css';
 
@@ -99,7 +100,7 @@ class App {
     });
 
 		window.addEventListener( 'resize', this.onWindowResize.bind( this ), false );
-    document.querySelector('.modal-content').addEventListener('click', ( e ) => {
+    document.querySelector('.rs-modal-content').addEventListener('click', ( e ) => {
       document.querySelector('.ico-content.active').classList.remove('active');
       e.target.closest('.ico-content').classList.add('active');
     })
@@ -136,17 +137,16 @@ class App {
 
     }
 
-//    if ( this.escenario == 'temp' ) {
-//      this.saveModal = new Modal(document.getElementById('save'));
-//      this.saveModal.hide();
-//      this.saveButton = document.querySelector('.save')
-//      this.saveButton.addEventListener('click', this.save.bind( this ) );
-//      this.saveNameButton = document.querySelector('#saveName');
-//      this.saveNameButton.addEventListener('click', this.saveName.bind( this ) );
-//      this.mW = window.location.pathname.split('/')[5];
-//      this.mH = window.location.pathname.split('/')[6];
-//      this.wK = window.location.pathname.split('/')[7];
-//    }
+    if ( this.escenario == 'temp' & this.viewType == 'visor' ) {
+      this.saveModal = new Modal(document.getElementById('saveModal'));
+      this.saveButton = document.querySelector('#saveButton')
+      this.saveButton.addEventListener('click', this.save.bind( this ) );
+      this.saveNameButton = document.getElementById('saveName');
+      this.saveNameButton.addEventListener('click', this.saveName.bind( this ) );
+      this.mW = window.location.pathname.split('/')[5];
+      this.mH = window.location.pathname.split('/')[6];
+      this.wK = window.location.pathname.split('/')[7];
+    }
 
     if ( this.room == 'master' || this.room == undefined ) {
       this.socket.on( 'mostrarRoom', ( room ) => {

@@ -180,7 +180,7 @@ class IconSidebar {
     this.socketId = this.sidebar.socket.id;
     this.sidebar.iconId = this._id;
     this.active = document.querySelector('.ico-content.active');
-    this.iconArray = Array.prototype.slice.call( document.querySelector('.modal-content').children );
+    this.iconArray = Array.prototype.slice.call( document.querySelector('.rs-modal-content').children );
     this.activeIndex = this.iconArray.indexOf( this.active );
     this.room = window.location.pathname.split('/')[4];
     this.sceneGroup = this.scene.getObjectByName( this.room );

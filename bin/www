@@ -313,14 +313,51 @@ io.on( 'connection', ( socket ) => {
 		    if (error) {
 			    console.log(error);
 		    }
+        fs.copyFile('src/config/config.json', 'routes/config.json', (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
 	    });
     });
-    fs.copyFile('src/config/config.json', 'routes/config.json', (err) => {
+  });
+
+  socket.on('borrarEscenario', (escenario) => {
+    fs.readFile('src/config/config.json', (error, data) => {
+      if (error) {
+        console.log(error);
+	      return;
+      }
+	    const conf = JSON.parse(data);
+      const new_conf = conf.filter( element => element.name != escenario );
+
+	    fs.writeFile('src/config/config.json', JSON.stringify(new_conf, null, 2), (error) => {
+		    if (error) {
+			    console.log(error);
+		    }
+        fs.copyFile('src/config/config.json', 'routes/config.json', (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      });
+
+    });
+    fs.unlink('public/images/mdt_' + escenario + '.bin', (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    fs.unlink('public/images/topo_' + escenario + '.png',  (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    fs.unlink('public/images/pnoa_' + escenario + '.png', (err) => {
       if (err) {
         console.log(err);
       }
     });
   });
-
     
 });
