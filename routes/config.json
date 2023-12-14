@@ -40,5 +40,17 @@
     "meshWidth": "359",
     "meshHeight": "201",
     "widthKm": "9"
+  },
+  {
+    "name": "irati",
+    "meshWidth": "184",
+    "meshHeight": "103",
+    "widthKm": "5"
+  },
+  {
+    "name": "murta",
+    "meshWidth": "245",
+    "meshHeight": "138",
+    "widthKm": "7"
   }
 ]

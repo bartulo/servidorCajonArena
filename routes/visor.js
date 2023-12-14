@@ -11,6 +11,16 @@ router.get('/proyector/:id', function(req, res, next) {
   });
 });
 
+router.get('/proyector/temp/master/:width/:height/:km', function(req, res, next) {
+  res.render('visor/visor.hbs', {
+    title: 'Proyector',
+    localizacion: 'temp',
+    viewType: 'proyector',
+    renderSidebar: false,
+    room: 'temp'
+  });
+});
+
 router.get('/visor', function(req, res, next) {
   res.render('visor/formulario.hbs');
 });

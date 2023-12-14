@@ -23,6 +23,7 @@ class AssetsLoader {
     } else {
       this.config = Config.filter( obj => obj.name === this.loc )[0];
     }
+    this.app.km = this.config.widthKm;
   }
 
   init () {
@@ -47,25 +48,32 @@ class AssetsLoader {
 
     const terrainLoader = new TerrainLoader();
 
-    if ( this.viewType == 'visor' ) {
+//    if ( this.viewType == 'visor' ) {
 
       promises.push( new Promise( resolve => {
         terrainLoader.load( `/images/mdt_${ this.loc }.bin`, ( data )=> {
+          const average = data.reduce((a, b) => a + b, 0) /data.length;
+          console.log(average);
           this.app.geometry = new PlaneGeometry( 680, 384, this.config.meshWidth - 1, this.config.meshHeight - 1);
 
           for ( let i = 0; i < this.config.meshWidth * this.config.meshHeight; i++ ) {
+            if (data[i] > 4000 || data[i] == 0) {
+              data[i] = average;
+            }
             this.app.geometry.attributes.position.array[ i * 3 + 2 ] = data[ i ] * 1.2 / ( this.config.widthKm * 1000 / 680 );
           }
+          this.app.minZ = Math.min(...data);
+          this.app.maxZ = Math.max(...data);
 
           resolve( );
         });
       }));
 
-    } else {
+//    } else {
 
-      this.app.geometry = new PlaneGeometry( 680, 384, 1, 1 );
+//      this.app.geometry = new PlaneGeometry( 680, 384, 1, 1 );
 
-    }
+//    }
 
     Promise.all( promises ).then( () => {
       this.app.init();

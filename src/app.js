@@ -45,6 +45,7 @@ class App {
     this.sidebar.app = this;
     this.terrainVS = require('./shaders/terrainVS.glsl');
     this.terrainFS = require('./shaders/terrainFS.glsl');
+    this.altitudFS = require('./shaders/altitudFS.glsl');
 		console.log(this.escenario);
 
     if ( this.viewType == 'visor' ) {
@@ -120,9 +121,13 @@ class App {
     textureVideo.format = RGBAFormat;
     this.texture.transparent = true;
 
+    console.log(this.km);
     var uniforms = {
       texture: { type: 't', value: this.texture },
-      texture2: { type: 't', value: textureVideo }
+      texture2: { type: 't', value: textureVideo },
+      minZ: { type: 'f', value: this.minZ },
+      maxZ: { type: 'f', value: this.maxZ },
+      widthS: { type: 'f', value: this.km }
     }
     this.material = new ShaderMaterial({
       uniforms: uniforms,
@@ -189,7 +194,12 @@ class App {
       if ( data == 'topo' ) {
         this.material.uniforms.texture.value = this.texture2;
       } else if ( data == 'pnoa' ) {
+        this.material.fragmentShader = this.terrainFS;
+        this.material.needsUpdate = true;
         this.material.uniforms.texture.value = this.texture;
+      } else if ( data == 'altitud' ) {
+        this.material.fragmentShader = this.altitudFS;
+        this.material.needsUpdate = true;
       }
       this.render();
     });
@@ -211,6 +221,14 @@ class App {
 
     this.video.addEventListener('ended', () => {
     })
+
+    this.socket.on('escenarioGuardado', (escenario) => {
+      console.log(escenario);
+      console.log(this.saveModal);
+      const footer = document.querySelector('.modal-footer');
+      console.log(footer);
+      footer.innerHTML = 'Escenario guardado';
+    });
 
 	}
 
@@ -238,19 +256,28 @@ class App {
 
   changeTexture() {
 
-    if ( this.material.uniforms.texture.value == this.texture ) {
+    if ( this.material.fragmentShader == this.terrainFS & this.material.uniforms.texture.value == this.texture ) {
 
       this.material.uniforms.texture.value = this.texture2;
       this.socket.emit( 'tecla', 'topo' );
+      this.textureButton.innerHTML = 'Altitud';
+
+    } else if ( this.material.fragmentShader == this.terrainFS & this.material.uniforms.texture.value == this.texture2 ) {
+
+      this.material.fragmentShader = this.altitudFS;
+      this.material.needsUpdate = true;
       this.textureButton.innerHTML = 'Ortofoto';
+      this.socket.emit( 'tecla', 'altitud' );
 
     } else {
-
+    
+      this.material.fragmentShader = this.terrainFS;
       this.material.uniforms.texture.value = this.texture;
+      this.material.needsUpdate = true;
       this.socket.emit( 'tecla', 'pnoa' );
       this.textureButton.innerHTML = 'Topo';
-
     }
+
     this.render();
   }
 

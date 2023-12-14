@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'development',
   entry: {
     app: './src/index.js',
     formulario: './src/formulario.js',

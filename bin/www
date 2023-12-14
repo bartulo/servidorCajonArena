@@ -317,6 +317,7 @@ io.on( 'connection', ( socket ) => {
           if (err) {
             console.log(err);
           }
+          socket.emit('escenarioGuardado', escenario);
         });
 	    });
     });
