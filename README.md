@@ -1,7 +1,7 @@
 # Instalar
 
 ```
-git clone
+git clone https://github.com/bartulo/servidorCajonArena.git
 cd servidorCajonArena
 npm install
 npm run build
