@@ -46,12 +46,21 @@ class App {
     this.terrainVS = require('./shaders/terrainVS.glsl');
     this.terrainFS = require('./shaders/terrainFS.glsl');
     this.altitudFS = require('./shaders/altitudFS.glsl');
-		console.log(this.escenario);
+    this.curvasSlider = document.getElementById('numCurvas');
 
     if ( this.viewType == 'visor' ) {
 
       this.sidebar.init();
       this.camera = new PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
+
+      this.curvasSlider.value = 8.;
+      document.querySelector('.curvas-container').style.display = 'none';
+
+      this.curvasSlider.addEventListener('input', (event) => {
+        this.material.uniforms.curvas.value = event.target.value;
+        this.render();
+        this.socket.emit('curvas', event.target.value);
+      });
 
     } else if ( this.viewType == 'proyector' ) {
 
@@ -121,13 +130,13 @@ class App {
     textureVideo.format = RGBAFormat;
     this.texture.transparent = true;
 
-    console.log(this.km);
     var uniforms = {
       texture: { type: 't', value: this.texture },
       texture2: { type: 't', value: textureVideo },
       minZ: { type: 'f', value: this.minZ },
       maxZ: { type: 'f', value: this.maxZ },
-      widthS: { type: 'f', value: this.km }
+      widthS: { type: 'f', value: this.km },
+      curvas: { type: 'f', value: 8. }
     }
     this.material = new ShaderMaterial({
       uniforms: uniforms,
@@ -223,11 +232,12 @@ class App {
     })
 
     this.socket.on('escenarioGuardado', (escenario) => {
-      console.log(escenario);
-      console.log(this.saveModal);
       const footer = document.querySelector('.modal-footer');
-      console.log(footer);
       footer.innerHTML = 'Escenario guardado';
+    });
+    this.socket.on('curvasChanged', (num) => {
+      this.material.uniforms.curvas.value = num; 
+      this.render();
     });
 
 	}
@@ -268,6 +278,9 @@ class App {
       this.material.needsUpdate = true;
       this.textureButton.innerHTML = 'Ortofoto';
       this.socket.emit( 'tecla', 'altitud' );
+      if (this.viewType == 'visor') {
+        document.querySelector('.curvas-container').style.display = 'block';
+      }
 
     } else {
     
@@ -276,6 +289,9 @@ class App {
       this.material.needsUpdate = true;
       this.socket.emit( 'tecla', 'pnoa' );
       this.textureButton.innerHTML = 'Topo';
+      if (this.viewType == 'visor') {
+        document.querySelector('.curvas-container').style.display = 'none';
+      }
     }
 
     this.render();
@@ -287,7 +303,6 @@ class App {
 
   saveName() {
 	  const name = document.querySelector('#recipient-name').value;
-	  console.log(this.wK);
 	  this.socket.emit('saveName', {
 	  name: name,
 	  mw: this.mW,

@@ -127,6 +127,15 @@
   line-height: 35px;
 }
 
+.curvas-container {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  width: 300px;
+  margin-left: -150px;
+  color: white;
+}
+
 .rs-modal {
   display: block;
   z-index: 1;

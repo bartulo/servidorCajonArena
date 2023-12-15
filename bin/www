@@ -272,6 +272,10 @@ io.on( 'connection', ( socket ) => {
     }
   });
 
+  socket.on('curvas', (num) => {
+    socket.broadcast.emit('curvasChanged', num);
+  });
+
   socket.on('mapa', ( mapa ) => {
     loadData( mapa ).then( () => {
       console.log( 'des' );
