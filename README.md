@@ -4,6 +4,7 @@
 git clone https://github.com/bartulo/servidorCajonArena.git
 cd servidorCajonArena
 npm install
+git checkout servidor
 npm run build
 ```
 Cuando termine de ejecutarse
